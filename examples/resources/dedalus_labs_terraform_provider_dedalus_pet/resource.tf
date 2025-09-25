@@ -1,4 +1,4 @@
-resource "dedalus_pet" "example_pet" {
+resource "dedalus-labs-terraform-provider-dedalus_pet" "example_pet" {
   name = "doggie"
   photo_urls = ["string"]
   id = 10
