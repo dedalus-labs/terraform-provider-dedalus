@@ -2,7 +2,7 @@ package customvalidator_test
 
 import (
 	"context"
-	"github.com/stainless-sdks/dedalus-terraform/internal/customvalidator"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/customvalidator"
 	"math/big"
 	"testing"
 

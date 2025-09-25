@@ -8,15 +8,15 @@ import (
 
 	"github.com/dedalus-labs/dedalus-go"
 	"github.com/dedalus-labs/dedalus-go/option"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/pet"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/store_order"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/user"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/stainless-sdks/dedalus-terraform/internal/services/pet"
-	"github.com/stainless-sdks/dedalus-terraform/internal/services/store_order"
-	"github.com/stainless-sdks/dedalus-terraform/internal/services/user"
 )
 
 var _ provider.ProviderWithConfigValidators = (*DedalusProvider)(nil)

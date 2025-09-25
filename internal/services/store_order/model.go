@@ -3,9 +3,9 @@
 package store_order
 
 import (
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/apijson"
 	"github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/stainless-sdks/dedalus-terraform/internal/apijson"
 )
 
 type StoreOrderModel struct {

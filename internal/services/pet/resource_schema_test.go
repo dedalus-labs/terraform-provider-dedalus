@@ -6,8 +6,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stainless-sdks/dedalus-terraform/internal/services/pet"
-	"github.com/stainless-sdks/dedalus-terraform/internal/test_helpers"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/pet"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/test_helpers"
 )
 
 func TestPetModelSchemaParity(t *testing.T) {

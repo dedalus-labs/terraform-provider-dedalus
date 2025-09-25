@@ -3,8 +3,8 @@
 package pet
 
 import (
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/customfield"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/stainless-sdks/dedalus-terraform/internal/customfield"
 )
 
 type PetDataSourceModel struct {

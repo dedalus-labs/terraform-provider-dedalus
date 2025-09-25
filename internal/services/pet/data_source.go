@@ -10,9 +10,9 @@ import (
 
 	"github.com/dedalus-labs/dedalus-go"
 	"github.com/dedalus-labs/dedalus-go/option"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/apijson"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/logging"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/stainless-sdks/dedalus-terraform/internal/apijson"
-	"github.com/stainless-sdks/dedalus-terraform/internal/logging"
 )
 
 type PetDataSource struct {
