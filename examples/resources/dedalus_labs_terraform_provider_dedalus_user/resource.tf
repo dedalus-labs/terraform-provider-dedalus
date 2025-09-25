@@ -1,4 +1,4 @@
-resource "dedalus_user" "example_user" {
+resource "dedalus-labs-terraform-provider-dedalus_user" "example_user" {
   id = 10
   email = "john@email.com"
   first_name = "John"

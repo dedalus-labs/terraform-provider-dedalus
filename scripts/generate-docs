@@ -20,4 +20,4 @@ linux*)
 esac
 
 go mod tidy
-exec -- "$EXEC" generate -rendered-provider-name "Dedalus" -provider-name="dedalus"
+exec -- "$EXEC" generate -rendered-provider-name "Dedalus Labs Terraform Provider Dedalus" -provider-name="dedalus-labs-terraform-provider-dedalus"

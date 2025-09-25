@@ -2,4 +2,4 @@
 
 set -e
 
-go build -o terraform-provider-dedalus
+go build -o terraform-provider-dedalus-labs-terraform-provider-dedalus
