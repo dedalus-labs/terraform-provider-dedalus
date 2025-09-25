@@ -6,8 +6,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stainless-sdks/dedalus-terraform/internal/services/store_order"
-	"github.com/stainless-sdks/dedalus-terraform/internal/test_helpers"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/store_order"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/test_helpers"
 )
 
 func TestStoreOrderModelSchemaParity(t *testing.T) {

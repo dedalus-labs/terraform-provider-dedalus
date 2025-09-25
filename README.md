@@ -1,6 +1,6 @@
 # Dedalus Terraform Provider
 
-The [Dedalus Terraform provider](https://registry.terraform.io/providers/stainless-sdks/dedalus/latest/docs) provides convenient access to
+The [Dedalus Terraform provider](https://registry.terraform.io/providers/dedalus-labs/dedalus/latest/docs) provides convenient access to
 the Dedalus REST API from Terraform.
 
 It is generated with [Stainless](https://www.stainless.com/).
@@ -14,12 +14,14 @@ on Hashicorp's website.
 
 Add the following to your `main.tf` file:
 
+<!-- x-release-please-start-version -->
+
 ```hcl
 # Declare the provider and version
 terraform {
   required_providers {
     dedalus = {
-      source  = "stainless-sdks/dedalus"
+      source  = "dedalus-labs/dedalus"
       version = "~> 0.0.1"
     }
   }
@@ -41,10 +43,12 @@ resource "dedalus_store_order" "example_store_order" {
 }
 ```
 
+<!-- x-release-please-end -->
+
 Initialize your project by running `terraform init` in the directory.
 
 Additional examples can be found in the [./examples](./examples) folder within this repository, and you can
-refer to the full documentation on [the Terraform Registry](https://registry.terraform.io/providers/stainless-sdks/dedalus/latest/docs).
+refer to the full documentation on [the Terraform Registry](https://registry.terraform.io/providers/dedalus-labs/dedalus/latest/docs).
 
 ### Provider Options
 
@@ -64,7 +68,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/dedalus-terraform/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/dedalus-labs/terraform-provider-dedalus/issues) with questions, bugs, or suggestions.
 
 ## Contributing
 

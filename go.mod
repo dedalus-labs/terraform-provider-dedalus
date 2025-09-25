@@ -1,4 +1,4 @@
-module github.com/stainless-sdks/dedalus-terraform
+module github.com/dedalus-labs/terraform-provider-dedalus
 
 go 1.23.0
 
