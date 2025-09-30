@@ -1,4 +1,4 @@
-resource "dedalus-labs-terraform-provider-dedalus_store_order" "example_store_order" {
+resource "dedalus_store_order" "example_store_order" {
   id = 10
   complete = true
   pet_id = 198772

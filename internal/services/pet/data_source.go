@@ -16,7 +16,7 @@ import (
 )
 
 type PetDataSource struct {
-	client *dedalus.Client
+	client *dedalusgo.Client
 }
 
 var _ datasource.DataSourceWithConfigure = (*PetDataSource)(nil)
@@ -34,12 +34,12 @@ func (d *PetDataSource) Configure(ctx context.Context, req datasource.ConfigureR
 		return
 	}
 
-	client, ok := req.ProviderData.(*dedalus.Client)
+	client, ok := req.ProviderData.(*dedalusgo.Client)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"unexpected resource configure type",
-			fmt.Sprintf("Expected *dedalus.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *dedalusgo.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return

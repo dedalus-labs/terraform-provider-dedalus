@@ -26,7 +26,7 @@ Then edit (or create) your `~/.terraformrc` to look something like this:
 ```hcl
   provider_installation {
     dev_overrides {
-      "dedalus-labs/dedalus-labs/terraform-provider-dedalus" = "/local/path/to/this/repo"
+      "dedalus-labs/dedalus" = "/local/path/to/this/repo"
     }
     direct {}
   }

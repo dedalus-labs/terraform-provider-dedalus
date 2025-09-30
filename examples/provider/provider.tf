@@ -1,3 +1,3 @@
-provider "dedalus-labs-terraform-provider-dedalus" {
+provider "dedalus" {
   api_key = "My API Key"
 }

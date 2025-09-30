@@ -19,24 +19,24 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-var _ provider.ProviderWithConfigValidators = (*DedalusLabsTerraformProviderDedalusProvider)(nil)
+var _ provider.ProviderWithConfigValidators = (*DedalusProvider)(nil)
 
-// DedalusLabsTerraformProviderDedalusProvider defines the provider implementation.
-type DedalusLabsTerraformProviderDedalusProvider struct {
+// DedalusProvider defines the provider implementation.
+type DedalusProvider struct {
 	// version is set to the provider version on release, "dev" when the
 	// provider is built and ran locally, and "test" when running acceptance
 	// testing.
 	version string
 }
 
-// DedalusLabsTerraformProviderDedalusProviderModel describes the provider data model.
-type DedalusLabsTerraformProviderDedalusProviderModel struct {
+// DedalusProviderModel describes the provider data model.
+type DedalusProviderModel struct {
 	BaseURL types.String `tfsdk:"base_url" json:"base_url,optional"`
 	APIKey  types.String `tfsdk:"api_key" json:"api_key,optional"`
 }
 
-func (p *DedalusLabsTerraformProviderDedalusProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
-	resp.TypeName = "dedalus-labs-terraform-provider-dedalus"
+func (p *DedalusProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
+	resp.TypeName = "dedalus"
 	resp.Version = p.version
 }
 
@@ -54,13 +54,13 @@ func ProviderSchema(ctx context.Context) schema.Schema {
 	}
 }
 
-func (p *DedalusLabsTerraformProviderDedalusProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
+func (p *DedalusProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = ProviderSchema(ctx)
 }
 
-func (p *DedalusLabsTerraformProviderDedalusProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
+func (p *DedalusProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
 
-	var data DedalusLabsTerraformProviderDedalusProviderModel
+	var data DedalusProviderModel
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
@@ -85,7 +85,7 @@ func (p *DedalusLabsTerraformProviderDedalusProvider) Configure(ctx context.Cont
 		return
 	}
 
-	client := dedalus.NewClient(
+	client := dedalusgo.NewClient(
 		opts...,
 	)
 
@@ -93,11 +93,11 @@ func (p *DedalusLabsTerraformProviderDedalusProvider) Configure(ctx context.Cont
 	resp.ResourceData = &client
 }
 
-func (p *DedalusLabsTerraformProviderDedalusProvider) ConfigValidators(_ context.Context) []provider.ConfigValidator {
+func (p *DedalusProvider) ConfigValidators(_ context.Context) []provider.ConfigValidator {
 	return []provider.ConfigValidator{}
 }
 
-func (p *DedalusLabsTerraformProviderDedalusProvider) Resources(ctx context.Context) []func() resource.Resource {
+func (p *DedalusProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		pet.NewResource,
 		store_order.NewResource,
@@ -105,7 +105,7 @@ func (p *DedalusLabsTerraformProviderDedalusProvider) Resources(ctx context.Cont
 	}
 }
 
-func (p *DedalusLabsTerraformProviderDedalusProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
+func (p *DedalusProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		pet.NewPetDataSource,
 		store_order.NewStoreOrderDataSource,
@@ -115,7 +115,7 @@ func (p *DedalusLabsTerraformProviderDedalusProvider) DataSources(ctx context.Co
 
 func NewProvider(version string) func() provider.Provider {
 	return func() provider.Provider {
-		return &DedalusLabsTerraformProviderDedalusProvider{
+		return &DedalusProvider{
 			version: version,
 		}
 	}
