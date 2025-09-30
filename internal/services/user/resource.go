@@ -29,7 +29,7 @@ func NewResource() resource.Resource {
 
 // UserResource defines the resource implementation.
 type UserResource struct {
-	client *dedalus.Client
+	client *dedalusgo.Client
 }
 
 func (r *UserResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -41,12 +41,12 @@ func (r *UserResource) Configure(ctx context.Context, req resource.ConfigureRequ
 		return
 	}
 
-	client, ok := req.ProviderData.(*dedalus.Client)
+	client, ok := req.ProviderData.(*dedalusgo.Client)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"unexpected resource configure type",
-			fmt.Sprintf("Expected *dedalus.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *dedalusgo.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return
@@ -72,7 +72,7 @@ func (r *UserResource) Create(ctx context.Context, req resource.CreateRequest, r
 	res := new(http.Response)
 	_, err = r.client.Users.New(
 		ctx,
-		dedalus.UserNewParams{},
+		dedalusgo.UserNewParams{},
 		option.WithRequestBody("application/json", dataBytes),
 		option.WithResponseBodyInto(&res),
 		option.WithMiddleware(logging.Middleware(ctx)),
@@ -108,7 +108,7 @@ func (r *UserResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		return
 	}
 
-	params := dedalus.UserUpdateParams{
+	params := dedalusgo.UserUpdateParams{
 		Username: param.NewOpt(data.ID.ValueInt64()),
 	}
 

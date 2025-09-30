@@ -28,7 +28,7 @@ func NewResource() resource.Resource {
 
 // StoreOrderResource defines the resource implementation.
 type StoreOrderResource struct {
-	client *dedalus.Client
+	client *dedalusgo.Client
 }
 
 func (r *StoreOrderResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -40,12 +40,12 @@ func (r *StoreOrderResource) Configure(ctx context.Context, req resource.Configu
 		return
 	}
 
-	client, ok := req.ProviderData.(*dedalus.Client)
+	client, ok := req.ProviderData.(*dedalusgo.Client)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"unexpected resource configure type",
-			fmt.Sprintf("Expected *dedalus.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *dedalusgo.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return
@@ -71,7 +71,7 @@ func (r *StoreOrderResource) Create(ctx context.Context, req resource.CreateRequ
 	res := new(http.Response)
 	_, err = r.client.Store.Orders.New(
 		ctx,
-		dedalus.StoreOrderNewParams{},
+		dedalusgo.StoreOrderNewParams{},
 		option.WithRequestBody("application/json", dataBytes),
 		option.WithResponseBodyInto(&res),
 		option.WithMiddleware(logging.Middleware(ctx)),

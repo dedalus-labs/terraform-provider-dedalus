@@ -22,7 +22,7 @@ func main() {
 	flag.Parse()
 
 	opts := providerserver.ServeOpts{
-		Address: "registry.terraform.io/dedalus-labs/dedalus-labs/terraform-provider-dedalus",
+		Address: "registry.terraform.io/dedalus-labs/dedalus",
 		Debug:   debug,
 	}
 

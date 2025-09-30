@@ -16,7 +16,7 @@ import (
 )
 
 type UserDataSource struct {
-	client *dedalus.Client
+	client *dedalusgo.Client
 }
 
 var _ datasource.DataSourceWithConfigure = (*UserDataSource)(nil)
@@ -34,12 +34,12 @@ func (d *UserDataSource) Configure(ctx context.Context, req datasource.Configure
 		return
 	}
 
-	client, ok := req.ProviderData.(*dedalus.Client)
+	client, ok := req.ProviderData.(*dedalusgo.Client)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"unexpected resource configure type",
-			fmt.Sprintf("Expected *dedalus.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *dedalusgo.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return

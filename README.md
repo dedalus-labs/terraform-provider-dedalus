@@ -1,6 +1,6 @@
 # Dedalus Terraform Provider
 
-The [Dedalus Terraform provider](https://registry.terraform.io/providers/dedalus-labs/dedalus-labs/terraform-provider-dedalus/latest/docs) provides convenient access to
+The [Dedalus Terraform provider](https://registry.terraform.io/providers/dedalus-labs/dedalus/latest/docs) provides convenient access to
 the Dedalus REST API from Terraform.
 
 It is generated with [Stainless](https://www.stainless.com/).
@@ -20,20 +20,20 @@ Add the following to your `main.tf` file:
 # Declare the provider and version
 terraform {
   required_providers {
-    dedalus-labs-terraform-provider-dedalus = {
-      source  = "dedalus-labs/dedalus-labs/terraform-provider-dedalus"
+    dedalus = {
+      source  = "dedalus-labs/dedalus"
       version = "~> 0.0.1"
     }
   }
 }
 
 # Initialize the provider
-provider "dedalus-labs-terraform-provider-dedalus" {
+provider "dedalus" {
   api_key = "My API Key" # or set PETSTORE_API_KEY env variable
 }
 
 # Configure a resource
-resource "dedalus-labs-terraform-provider-dedalus_store_order" "example_store_order" {
+resource "dedalus_store_order" "example_store_order" {
   id = 10
   complete = true
   pet_id = 1
@@ -48,7 +48,7 @@ resource "dedalus-labs-terraform-provider-dedalus_store_order" "example_store_or
 Initialize your project by running `terraform init` in the directory.
 
 Additional examples can be found in the [./examples](./examples) folder within this repository, and you can
-refer to the full documentation on [the Terraform Registry](https://registry.terraform.io/providers/dedalus-labs/dedalus-labs/terraform-provider-dedalus/latest/docs).
+refer to the full documentation on [the Terraform Registry](https://registry.terraform.io/providers/dedalus-labs/dedalus/latest/docs).
 
 ### Provider Options
 
