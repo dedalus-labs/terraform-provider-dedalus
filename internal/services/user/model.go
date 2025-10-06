@@ -5,7 +5,6 @@ package user
 import (
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/apijson"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/tidwall/sjson"
 )
 
 type UserModel struct {
@@ -25,9 +24,5 @@ func (m UserModel) MarshalJSON() (data []byte, err error) {
 }
 
 func (m UserModel) MarshalJSONForUpdate(state UserModel) (data []byte, err error) {
-	data, err = apijson.MarshalForUpdate(m, state)
-	if err != nil {
-		return nil, err
-	}
-	return sjson.SetBytes(data, "username", m.Username.ValueString())
+	return apijson.MarshalForUpdate(m, state)
 }

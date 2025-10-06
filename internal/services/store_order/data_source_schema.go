@@ -17,13 +17,13 @@ var _ datasource.DataSourceWithConfigValidators = (*StoreOrderDataSource)(nil)
 func DataSourceSchema(ctx context.Context) schema.Schema {
 	return schema.Schema{
 		Attributes: map[string]schema.Attribute{
+			"id": schema.Int64Attribute{
+				Computed: true,
+			},
 			"order_id": schema.Int64Attribute{
 				Required: true,
 			},
 			"complete": schema.BoolAttribute{
-				Computed: true,
-			},
-			"id": schema.Int64Attribute{
 				Computed: true,
 			},
 			"pet_id": schema.Int64Attribute{

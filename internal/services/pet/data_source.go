@@ -74,6 +74,7 @@ func (d *PetDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("failed to deserialize http request", err.Error())
 		return
 	}
+	data.ID = data.PetID
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

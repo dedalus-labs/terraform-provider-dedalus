@@ -8,8 +8,8 @@ import (
 )
 
 type PetDataSourceModel struct {
+	ID        types.Int64                                          `tfsdk:"id" path:"petId,computed"`
 	PetID     types.Int64                                          `tfsdk:"pet_id" path:"petId,required"`
-	ID        types.Int64                                          `tfsdk:"id" json:"id,computed"`
 	Name      types.String                                         `tfsdk:"name" json:"name,computed"`
 	Status    types.String                                         `tfsdk:"status" json:"status,computed"`
 	PhotoURLs customfield.List[types.String]                       `tfsdk:"photo_urls" json:"photoUrls,computed"`

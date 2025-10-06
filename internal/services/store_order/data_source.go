@@ -74,6 +74,7 @@ func (d *StoreOrderDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		resp.Diagnostics.AddError("failed to deserialize http request", err.Error())
 		return
 	}
+	data.ID = data.OrderID
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
