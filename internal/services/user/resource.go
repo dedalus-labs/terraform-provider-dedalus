@@ -10,7 +10,6 @@ import (
 
 	"github.com/dedalus-labs/dedalus-go"
 	"github.com/dedalus-labs/dedalus-go/option"
-	"github.com/dedalus-labs/dedalus-go/packages/param"
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/apijson"
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/importpath"
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/logging"
@@ -108,10 +107,6 @@ func (r *UserResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		return
 	}
 
-	params := dedalusgo.UserUpdateParams{
-		Username: param.NewOpt(data.ID.ValueInt64()),
-	}
-
 	dataBytes, err := data.MarshalJSONForUpdate(*state)
 	if err != nil {
 		resp.Diagnostics.AddError("failed to serialize http request", err.Error())
@@ -120,8 +115,8 @@ func (r *UserResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	res := new(http.Response)
 	err = r.client.Users.Update(
 		ctx,
-		data.ExistingUsername.ValueString(),
-		params,
+		data.ID.ValueInt64(),
+		dedalusgo.UserUpdateParams{},
 		option.WithRequestBody("application/json", dataBytes),
 		option.WithResponseBodyInto(&res),
 		option.WithMiddleware(logging.Middleware(ctx)),
