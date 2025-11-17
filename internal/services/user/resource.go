@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 
 	"github.com/dedalus-labs/dedalus-go"
 	"github.com/dedalus-labs/dedalus-go/option"
@@ -115,7 +116,7 @@ func (r *UserResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	res := new(http.Response)
 	err = r.client.Users.Update(
 		ctx,
-		data.ID.ValueInt64(),
+		strconv.FormatInt(data.ID.ValueInt64(), 10),
 		dedalusgo.UserUpdateParams{},
 		option.WithRequestBody("application/json", dataBytes),
 		option.WithResponseBodyInto(&res),
@@ -147,7 +148,7 @@ func (r *UserResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	res := new(http.Response)
 	_, err := r.client.Users.Get(
 		ctx,
-		data.ID.ValueInt64(),
+		strconv.FormatInt(data.ID.ValueInt64(), 10),
 		option.WithResponseBodyInto(&res),
 		option.WithMiddleware(logging.Middleware(ctx)),
 	)
@@ -181,7 +182,7 @@ func (r *UserResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 
 	err := r.client.Users.Delete(
 		ctx,
-		data.ID.ValueInt64(),
+		strconv.FormatInt(data.ID.ValueInt64(), 10),
 		option.WithMiddleware(logging.Middleware(ctx)),
 	)
 	if err != nil {
