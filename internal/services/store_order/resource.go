@@ -152,7 +152,7 @@ func (r *StoreOrderResource) Delete(ctx context.Context, req resource.DeleteRequ
 }
 
 func (r *StoreOrderResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	var data *StoreOrderModel = new(StoreOrderModel)
+	var data = new(StoreOrderModel)
 
 	path := int64(0)
 	diags := importpath.ParseImportID(
