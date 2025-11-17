@@ -10,7 +10,6 @@ import (
 
 type PetModel struct {
 	ID        types.Int64       `tfsdk:"id" json:"id,required"`
-	PetID     types.Int64       `tfsdk:"pet_id" path:"petId,optional"`
 	Name      types.String      `tfsdk:"name" json:"name,required"`
 	PhotoURLs *[]types.String   `tfsdk:"photo_urls" json:"photoUrls,required"`
 	Status    types.String      `tfsdk:"status" json:"status,optional"`

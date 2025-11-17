@@ -210,7 +210,7 @@ func (r *PetResource) ImportState(ctx context.Context, req resource.ImportStateR
 		return
 	}
 
-	data.PetID = types.Int64Value(path)
+	data.ID = types.Int64Value(path)
 
 	res := new(http.Response)
 	_, err := r.client.Pets.Get(

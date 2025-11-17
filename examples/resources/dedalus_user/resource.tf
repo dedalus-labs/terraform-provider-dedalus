@@ -5,6 +5,6 @@ resource "dedalus_user" "example_user" {
   last_name = "James"
   password = "12345"
   phone = "12345"
-  existing_username = "theUser"
+  username = "theUser"
   user_status = 1
 }
