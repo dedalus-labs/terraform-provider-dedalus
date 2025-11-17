@@ -194,7 +194,7 @@ func (r *UserResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 }
 
 func (r *UserResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	var data *UserModel = new(UserModel)
+	var data = new(UserModel)
 
 	path := ""
 	diags := importpath.ParseImportID(

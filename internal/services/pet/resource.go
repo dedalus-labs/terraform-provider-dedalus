@@ -197,7 +197,7 @@ func (r *PetResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 }
 
 func (r *PetResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	var data *PetModel = new(PetModel)
+	var data = new(PetModel)
 
 	path := int64(0)
 	diags := importpath.ParseImportID(
