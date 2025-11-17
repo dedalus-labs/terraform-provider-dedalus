@@ -10,7 +10,6 @@ import (
 
 type StoreOrderModel struct {
 	ID       types.Int64       `tfsdk:"id" json:"id,required"`
-	OrderID  types.Int64       `tfsdk:"order_id" path:"orderId,optional"`
 	Complete types.Bool        `tfsdk:"complete" json:"complete,optional"`
 	PetID    types.Int64       `tfsdk:"pet_id" json:"petId,optional"`
 	Quantity types.Int64       `tfsdk:"quantity" json:"quantity,optional"`

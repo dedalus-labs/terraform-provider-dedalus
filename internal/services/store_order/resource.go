@@ -165,7 +165,7 @@ func (r *StoreOrderResource) ImportState(ctx context.Context, req resource.Impor
 		return
 	}
 
-	data.OrderID = types.Int64Value(path)
+	data.ID = types.Int64Value(path)
 
 	res := new(http.Response)
 	_, err := r.client.Store.Orders.Get(
