@@ -5,8 +5,8 @@ go 1.23.0
 toolchain go1.23.9
 
 require (
-	github.com/dedalus-labs/dedalus-go latest
 	github.com/davecgh/go-spew v1.1.1
+	github.com/dedalus-labs/dedalus-go v0.0.0
 	github.com/hashicorp/terraform-plugin-docs v0.16.0
 	github.com/hashicorp/terraform-plugin-framework v1.15.0
 	github.com/hashicorp/terraform-plugin-framework-jsontypes v0.2.0
@@ -75,3 +75,5 @@ require (
 	google.golang.org/grpc v1.72.1 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 )
+
+replace github.com/dedalus-labs/dedalus-go => github.com/stainless-sdks/dedalus-go v0.0.0-20250925053814-f751cadef73d
