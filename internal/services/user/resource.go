@@ -148,7 +148,7 @@ func (r *UserResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	res := new(http.Response)
 	_, err := r.client.Users.Get(
 		ctx,
-		strconv.FormatInt(data.ID.ValueInt64(), 10),
+		data.Username.ValueString(),
 		option.WithResponseBodyInto(&res),
 		option.WithMiddleware(logging.Middleware(ctx)),
 	)
@@ -182,7 +182,7 @@ func (r *UserResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 
 	err := r.client.Users.Delete(
 		ctx,
-		strconv.FormatInt(data.ID.ValueInt64(), 10),
+		data.Username.ValueString(),
 		option.WithMiddleware(logging.Middleware(ctx)),
 	)
 	if err != nil {
