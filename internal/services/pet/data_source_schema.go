@@ -17,6 +17,7 @@ var _ datasource.DataSourceWithConfigValidators = (*PetDataSource)(nil)
 
 func DataSourceSchema(ctx context.Context) schema.Schema {
 	return schema.Schema{
+		Description: "Everything about your Pets",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.Int64Attribute{
 				Computed: true,

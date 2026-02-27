@@ -20,6 +20,7 @@ var _ resource.ResourceWithConfigValidators = (*StoreOrderResource)(nil)
 
 func ResourceSchema(ctx context.Context) schema.Schema {
 	return schema.Schema{
+		Description: "Access to Petstore orders",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.Int64Attribute{
 				Required:      true,

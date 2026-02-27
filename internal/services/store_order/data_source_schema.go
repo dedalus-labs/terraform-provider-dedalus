@@ -16,6 +16,7 @@ var _ datasource.DataSourceWithConfigValidators = (*StoreOrderDataSource)(nil)
 
 func DataSourceSchema(ctx context.Context) schema.Schema {
 	return schema.Schema{
+		Description: "Access to Petstore orders",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.Int64Attribute{
 				Computed: true,

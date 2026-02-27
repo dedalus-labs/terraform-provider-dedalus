@@ -18,6 +18,7 @@ var _ resource.ResourceWithConfigValidators = (*PetResource)(nil)
 
 func ResourceSchema(ctx context.Context) schema.Schema {
 	return schema.Schema{
+		Description: "Everything about your Pets",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.Int64Attribute{
 				Required:      true,
