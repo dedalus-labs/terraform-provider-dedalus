@@ -15,6 +15,7 @@ var _ resource.ResourceWithConfigValidators = (*UserResource)(nil)
 
 func ResourceSchema(ctx context.Context) schema.Schema {
 	return schema.Schema{
+		Description: "Operations about user",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.Int64Attribute{
 				Required:      true,

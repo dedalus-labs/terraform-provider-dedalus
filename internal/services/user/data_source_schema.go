@@ -13,6 +13,7 @@ var _ datasource.DataSourceWithConfigValidators = (*UserDataSource)(nil)
 
 func DataSourceSchema(ctx context.Context) schema.Schema {
 	return schema.Schema{
+		Description: "Operations about user",
 		Attributes: map[string]schema.Attribute{
 			"username": schema.StringAttribute{
 				Required: true,
