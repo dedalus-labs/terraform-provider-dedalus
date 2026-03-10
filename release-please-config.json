@@ -59,6 +59,9 @@
       "hidden": true
     }
   ],
+  "reviewers": [
+    "@windsornguyen"
+  ],
   "release-type": "simple",
   "extra-files": [
     "internal/version.go",

@@ -8,7 +8,7 @@ if [[ -n "$1" ]]; then
   LOCAL_GO="$1"
   shift
 else
-  LOCAL_GO=../dedalus-go
+  LOCAL_GO=../Dedalus-go
 fi
 
 echo "==> Linking with local directory"
