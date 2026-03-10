@@ -1,7 +1,7 @@
 # Dedalus Terraform Provider
 
 The [Dedalus Terraform provider](https://registry.terraform.io/providers/dedalus-labs/dedalus/latest/docs) provides convenient access to
-the Dedalus REST API from Terraform.
+the [Dedalus REST API](https://docs.dedaluslabs.ai) from Terraform.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
@@ -29,17 +29,20 @@ terraform {
 
 # Initialize the provider
 provider "dedalus" {
-  api_key = "My API Key" # or set PETSTORE_API_KEY env variable
+  # Dedalus API key sent as Authorization: Bearer <key>.
+  api_key = "My API Key" # or set DEDALUS_API_KEY env variable
+  # Dedalus API key sent as x-api-key.
+  x_api_key = "My X API Key" # or set DEDALUS_X_API_KEY env variable
+  # Organization ID header applied to all DCS requests.
+  dedalus_org_id = "My Dedalus Org ID" # or set DEDALUS_ORG_ID env variable
 }
 
 # Configure a resource
-resource "dedalus_store_order" "example_store_order" {
-  id = 10
-  complete = true
-  pet_id = 1
-  quantity = 1
-  ship_date = "2019-12-27T18:11:19.117Z"
-  status = "placed"
+resource "dedalus_workspace" "example_workspace" {
+  cpus = 1
+  image_version = "noble@2026-03-01.1"
+  memory_mib = 2048
+  storage_gib = 20
 }
 ```
 
@@ -55,9 +58,11 @@ refer to the full documentation on [the Terraform Registry](https://registry.ter
 When you initialize the provider, the following options are supported. It is recommended to use environment variables for sensitive values like access tokens.
 If an environment variable is provided, then the option does not need to be set in the terraform source.
 
-| Property | Environment variable | Required | Default value |
-| -------- | -------------------- | -------- | ------------- |
-| api_key  | `PETSTORE_API_KEY`   | true     | —             |
+| Property       | Environment variable | Required | Default value |
+| -------------- | -------------------- | -------- | ------------- |
+| x_api_key      | `DEDALUS_X_API_KEY`  | false    | —             |
+| dedalus_org_id | `DEDALUS_ORG_ID`     | false    | —             |
+| api_key        | `DEDALUS_API_KEY`    | false    | —             |
 
 ## Semantic versioning
 
