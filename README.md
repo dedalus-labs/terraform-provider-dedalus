@@ -39,10 +39,10 @@ provider "dedalus" {
 
 # Configure a resource
 resource "dedalus_workspace" "example_workspace" {
-  cpus = 1
-  image_version = "noble@2026-03-01.1"
+  image_version = "noble@golden"
   memory_mib = 2048
-  storage_gib = 20
+  storage_gib = 10
+  vcpu = 1
 }
 ```
 

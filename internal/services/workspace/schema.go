@@ -33,14 +33,16 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 				Required:      true,
 				PlanModifiers: []planmodifier.String{stringplanmodifier.RequiresReplace()},
 			},
-			"cpus": schema.Int64Attribute{
-				Required: true,
-			},
 			"memory_mib": schema.Int64Attribute{
-				Required: true,
+				Description: "Memory in MiB.",
+				Required:    true,
 			},
 			"storage_gib": schema.Int64Attribute{
 				Required: true,
+			},
+			"vcpu": schema.Float64Attribute{
+				Description: "CPU in vCPUs.",
+				Required:    true,
 			},
 			"desired_state": schema.StringAttribute{
 				Description: `Available values: "active", "inactive", "destroyed".`,
@@ -102,6 +104,15 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 						Computed: true,
 					},
 					"last_error": schema.StringAttribute{
+						Computed: true,
+					},
+					"memory_assigned_mib": schema.Int64Attribute{
+						Computed: true,
+					},
+					"memory_resize_state": schema.StringAttribute{
+						Computed: true,
+					},
+					"memory_target_mib": schema.Int64Attribute{
 						Computed: true,
 					},
 				},
