@@ -29,10 +29,6 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 				Computed:      true,
 				PlanModifiers: []planmodifier.String{stringplanmodifier.UseStateForUnknown()},
 			},
-			"image_version": schema.StringAttribute{
-				Required:      true,
-				PlanModifiers: []planmodifier.String{stringplanmodifier.RequiresReplace()},
-			},
 			"memory_mib": schema.Int64Attribute{
 				Description: "Memory in MiB.",
 				Required:    true,
@@ -71,9 +67,6 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 						Computed:   true,
 						CustomType: timetypes.RFC3339Type{},
 					},
-					"observed_revision": schema.StringAttribute{
-						Computed: true,
-					},
 					"phase": schema.StringAttribute{
 						Description: `Available values: "accepted", "placement_pending", "starting", "running", "stopping", "sleeping", "destroying", "destroyed", "failed".`,
 						Computed:    true,
@@ -100,19 +93,7 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 					"revision": schema.StringAttribute{
 						Computed: true,
 					},
-					"assigned_host": schema.StringAttribute{
-						Computed: true,
-					},
 					"last_error": schema.StringAttribute{
-						Computed: true,
-					},
-					"memory_assigned_mib": schema.Int64Attribute{
-						Computed: true,
-					},
-					"memory_resize_state": schema.StringAttribute{
-						Computed: true,
-					},
-					"memory_target_mib": schema.Int64Attribute{
 						Computed: true,
 					},
 				},
