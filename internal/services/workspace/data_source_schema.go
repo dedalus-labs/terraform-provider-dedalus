@@ -40,10 +40,6 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 				Description: "Memory in MiB.",
 				Computed:    true,
 			},
-			"schema": schema.StringAttribute{
-				Description: "A URL to the JSON Schema for this object.",
-				Computed:    true,
-			},
 			"storage_gib": schema.Int64Attribute{
 				Computed: true,
 			},

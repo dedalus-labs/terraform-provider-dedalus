@@ -14,7 +14,6 @@ type WorkspaceDataSourceModel struct {
 	WorkspaceID  types.String                                             `tfsdk:"workspace_id" path:"workspace_id,required"`
 	DesiredState types.String                                             `tfsdk:"desired_state" json:"desired_state,computed"`
 	MemoryMiB    types.Int64                                              `tfsdk:"memory_mib" json:"memory_mib,computed"`
-	Schema       types.String                                             `tfsdk:"schema" json:"$schema,computed"`
 	StorageGiB   types.Int64                                              `tfsdk:"storage_gib" json:"storage_gib,computed"`
 	VCPU         types.Float64                                            `tfsdk:"vcpu" json:"vcpu,computed"`
 	Status       customfield.NestedObject[WorkspaceStatusDataSourceModel] `tfsdk:"status" json:"status,computed"`

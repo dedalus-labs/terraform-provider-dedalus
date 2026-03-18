@@ -51,10 +51,6 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 					),
 				},
 			},
-			"schema": schema.StringAttribute{
-				Description: "A URL to the JSON Schema for this object.",
-				Computed:    true,
-			},
 			"status": schema.SingleNestedAttribute{
 				Computed:   true,
 				CustomType: customfield.NewNestedObjectType[WorkspaceStatusModel](ctx),

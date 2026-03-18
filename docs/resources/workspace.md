@@ -37,7 +37,6 @@ resource "dedalus_workspace" "example_workspace" {
 
 - `desired_state` (String) Available values: "active", "inactive", "destroyed".
 - `id` (String) The ID of this resource.
-- `schema` (String) A URL to the JSON Schema for this object.
 - `status` (Attributes) (see [below for nested schema](#nestedatt--status))
 - `workspace_id` (String)
 

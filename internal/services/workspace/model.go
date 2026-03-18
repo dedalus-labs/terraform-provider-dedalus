@@ -17,7 +17,6 @@ type WorkspaceModel struct {
 	StorageGiB   types.Int64                                    `tfsdk:"storage_gib" json:"storage_gib,required"`
 	VCPU         types.Float64                                  `tfsdk:"vcpu" json:"vcpu,required"`
 	DesiredState types.String                                   `tfsdk:"desired_state" json:"desired_state,computed"`
-	Schema       types.String                                   `tfsdk:"schema" json:"$schema,computed"`
 	Status       customfield.NestedObject[WorkspaceStatusModel] `tfsdk:"status" json:"status,computed"`
 	Timeouts     timeouts.Value                                 `tfsdk:"timeouts"`
 }
