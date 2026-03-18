@@ -34,7 +34,6 @@ data "dedalus_workspace" "example_workspace" {
 - `desired_state` (String) Available values: "active", "inactive", "destroyed".
 - `id` (String) The ID of this resource.
 - `memory_mib` (Number) Memory in MiB.
-- `schema` (String) A URL to the JSON Schema for this object.
 - `status` (Attributes) (see [below for nested schema](#nestedatt--status))
 - `storage_gib` (Number)
 - `vcpu` (Number) CPU in vCPUs.
