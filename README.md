@@ -39,7 +39,6 @@ provider "dedalus" {
 
 # Configure a resource
 resource "dedalus_workspace" "example_workspace" {
-  image_version = "noble@golden"
   memory_mib = 2048
   storage_gib = 10
   vcpu = 1

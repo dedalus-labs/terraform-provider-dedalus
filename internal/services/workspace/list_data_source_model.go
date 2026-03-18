@@ -38,20 +38,14 @@ type WorkspacesItemsDataSourceModel struct {
 	StorageGiB   types.Int64                                               `tfsdk:"storage_gib" json:"storage_gib,computed"`
 	VCPU         types.Float64                                             `tfsdk:"vcpu" json:"vcpu,computed"`
 	WorkspaceID  types.String                                              `tfsdk:"workspace_id" json:"workspace_id,computed"`
-	ImageVersion types.String                                              `tfsdk:"image_version" json:"image_version,computed"`
 }
 
 type WorkspacesStatusDataSourceModel struct {
-	LastProgressAt    timetypes.RFC3339 `tfsdk:"last_progress_at" json:"last_progress_at,computed" format:"date-time"`
-	LastTransitionAt  timetypes.RFC3339 `tfsdk:"last_transition_at" json:"last_transition_at,computed" format:"date-time"`
-	ObservedRevision  types.String      `tfsdk:"observed_revision" json:"observed_revision,computed"`
-	Phase             types.String      `tfsdk:"phase" json:"phase,computed"`
-	Reason            types.String      `tfsdk:"reason" json:"reason,computed"`
-	Retryable         types.Bool        `tfsdk:"retryable" json:"retryable,computed"`
-	Revision          types.String      `tfsdk:"revision" json:"revision,computed"`
-	AssignedHost      types.String      `tfsdk:"assigned_host" json:"assigned_host,computed"`
-	LastError         types.String      `tfsdk:"last_error" json:"last_error,computed"`
-	MemoryAssignedMiB types.Int64       `tfsdk:"memory_assigned_mib" json:"memory_assigned_mib,computed"`
-	MemoryResizeState types.String      `tfsdk:"memory_resize_state" json:"memory_resize_state,computed"`
-	MemoryTargetMiB   types.Int64       `tfsdk:"memory_target_mib" json:"memory_target_mib,computed"`
+	LastProgressAt   timetypes.RFC3339 `tfsdk:"last_progress_at" json:"last_progress_at,computed" format:"date-time"`
+	LastTransitionAt timetypes.RFC3339 `tfsdk:"last_transition_at" json:"last_transition_at,computed" format:"date-time"`
+	Phase            types.String      `tfsdk:"phase" json:"phase,computed"`
+	Reason           types.String      `tfsdk:"reason" json:"reason,computed"`
+	Retryable        types.Bool        `tfsdk:"retryable" json:"retryable,computed"`
+	Revision         types.String      `tfsdk:"revision" json:"revision,computed"`
+	LastError        types.String      `tfsdk:"last_error" json:"last_error,computed"`
 }

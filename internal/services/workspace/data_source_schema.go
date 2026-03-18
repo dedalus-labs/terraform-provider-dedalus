@@ -36,9 +36,6 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 					),
 				},
 			},
-			"image_version": schema.StringAttribute{
-				Computed: true,
-			},
 			"memory_mib": schema.Int64Attribute{
 				Description: "Memory in MiB.",
 				Computed:    true,
@@ -66,9 +63,6 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 						Computed:   true,
 						CustomType: timetypes.RFC3339Type{},
 					},
-					"observed_revision": schema.StringAttribute{
-						Computed: true,
-					},
 					"phase": schema.StringAttribute{
 						Description: `Available values: "accepted", "placement_pending", "starting", "running", "stopping", "sleeping", "destroying", "destroyed", "failed".`,
 						Computed:    true,
@@ -95,19 +89,7 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 					"revision": schema.StringAttribute{
 						Computed: true,
 					},
-					"assigned_host": schema.StringAttribute{
-						Computed: true,
-					},
 					"last_error": schema.StringAttribute{
-						Computed: true,
-					},
-					"memory_assigned_mib": schema.Int64Attribute{
-						Computed: true,
-					},
-					"memory_resize_state": schema.StringAttribute{
-						Computed: true,
-					},
-					"memory_target_mib": schema.Int64Attribute{
 						Computed: true,
 					},
 				},
