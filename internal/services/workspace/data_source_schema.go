@@ -36,8 +36,22 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 					),
 				},
 			},
+			"image_version": schema.StringAttribute{
+				Computed: true,
+			},
+			"memory_mib": schema.Int64Attribute{
+				Description: "Memory in MiB.",
+				Computed:    true,
+			},
 			"schema": schema.StringAttribute{
 				Description: "A URL to the JSON Schema for this object.",
+				Computed:    true,
+			},
+			"storage_gib": schema.Int64Attribute{
+				Computed: true,
+			},
+			"vcpu": schema.Float64Attribute{
+				Description: "CPU in vCPUs.",
 				Computed:    true,
 			},
 			"status": schema.SingleNestedAttribute{
@@ -85,6 +99,15 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 						Computed: true,
 					},
 					"last_error": schema.StringAttribute{
+						Computed: true,
+					},
+					"memory_assigned_mib": schema.Int64Attribute{
+						Computed: true,
+					},
+					"memory_resize_state": schema.StringAttribute{
+						Computed: true,
+					},
+					"memory_target_mib": schema.Int64Attribute{
 						Computed: true,
 					},
 				},

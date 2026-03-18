@@ -36,9 +36,6 @@ func ListDataSourceSchema(ctx context.Context) schema.Schema {
 						"id": schema.StringAttribute{
 							Computed: true,
 						},
-						"cpus": schema.Int64Attribute{
-							Computed: true,
-						},
 						"created_at": schema.StringAttribute{
 							Computed:   true,
 							CustomType: timetypes.RFC3339Type{},
@@ -55,7 +52,8 @@ func ListDataSourceSchema(ctx context.Context) schema.Schema {
 							},
 						},
 						"memory_mib": schema.Int64Attribute{
-							Computed: true,
+							Description: "Memory in MiB.",
+							Computed:    true,
 						},
 						"status": schema.SingleNestedAttribute{
 							Computed:   true,
@@ -104,10 +102,23 @@ func ListDataSourceSchema(ctx context.Context) schema.Schema {
 								"last_error": schema.StringAttribute{
 									Computed: true,
 								},
+								"memory_assigned_mib": schema.Int64Attribute{
+									Computed: true,
+								},
+								"memory_resize_state": schema.StringAttribute{
+									Computed: true,
+								},
+								"memory_target_mib": schema.Int64Attribute{
+									Computed: true,
+								},
 							},
 						},
 						"storage_gib": schema.Int64Attribute{
 							Computed: true,
+						},
+						"vcpu": schema.Float64Attribute{
+							Description: "CPU in vCPUs.",
+							Computed:    true,
 						},
 						"workspace_id": schema.StringAttribute{
 							Computed: true,
