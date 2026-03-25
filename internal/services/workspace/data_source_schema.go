@@ -26,12 +26,12 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 				Required: true,
 			},
 			"desired_state": schema.StringAttribute{
-				Description: `Available values: "active", "inactive", "destroyed".`,
+				Description: `Available values: "running", "sleeping", "destroyed".`,
 				Computed:    true,
 				Validators: []validator.String{
 					stringvalidator.OneOfCaseInsensitive(
-						"active",
-						"inactive",
+						"running",
+						"sleeping",
 						"destroyed",
 					),
 				},

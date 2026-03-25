@@ -44,7 +44,7 @@ Optional:
 Read-Only:
 
 - `created_at` (String)
-- `desired_state` (String) Available values: "active", "inactive", "destroyed".
+- `desired_state` (String) Available values: "running", "sleeping", "destroyed".
 - `id` (String)
 - `memory_mib` (Number) Memory in MiB.
 - `status` (Attributes) (see [below for nested schema](#nestedatt--items--status))
