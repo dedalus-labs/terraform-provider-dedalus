@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/stainless-sdks/dedalus-terraform/internal/importpath"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/importpath"
 )
 
 func TestParseID(t *testing.T) {

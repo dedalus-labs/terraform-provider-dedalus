@@ -1,28 +1,37 @@
 name: CI
 on:
   push:
-    branches-ignore:
-      - 'generated'
-      - 'codegen/**'
-      - 'integrated/**'
-      - 'stl-preview-head/**'
-      - 'stl-preview-base/**'
+    branches:
+      - '**'
+      - '!integrated/**'
+      - '!stl-preview-head/**'
+      - '!stl-preview-base/**'
+      - '!generated'
+      - '!codegen/**'
+      - 'codegen/stl/**'
   pull_request:
     branches-ignore:
       - 'stl-preview-head/**'
       - 'stl-preview-base/**'
+
+env:
+  GOPRIVATE: github.com/dedalus-labs/dedalus-go,github.com/stainless-sdks/dedalus-go
 
 jobs:
   lint:
     runs-on: ${{ github.repository == 'stainless-sdks/dedalus-terraform' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
     if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - name: Setup go
-        uses: actions/setup-go@v5
+      - uses: ./.github/actions/setup-go
         with:
-          go-version-file: ./go.mod
+          stainless-api-key: ${{ secrets.STAINLESS_API_KEY }}
+
+      - name: Link staging branch
+        if: github.repository == 'stainless-sdks/dedalus-terraform'
+        run: |
+          ./scripts/link 'github.com/stainless-sdks/dedalus-go@${{ github.ref_name }}' || true
 
       - name: Bootstrap
         run: ./scripts/bootstrap
@@ -34,12 +43,16 @@ jobs:
     runs-on: ${{ github.repository == 'stainless-sdks/dedalus-terraform' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
     if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - name: Setup go
-        uses: actions/setup-go@v5
+      - uses: ./.github/actions/setup-go
         with:
-          go-version-file: ./go.mod
+          stainless-api-key: ${{ secrets.STAINLESS_API_KEY }}
+
+      - name: Link staging branch
+        if: github.repository == 'stainless-sdks/dedalus-terraform'
+        run: |
+          ./scripts/link 'github.com/stainless-sdks/dedalus-go@${{ github.ref_name }}' || true
 
       - name: Bootstrap
         run: ./scripts/bootstrap

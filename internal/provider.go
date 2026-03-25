@@ -8,15 +8,12 @@ import (
 
 	"github.com/dedalus-labs/dedalus-go"
 	"github.com/dedalus-labs/dedalus-go/option"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/workspace"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/stainless-sdks/dedalus-terraform/internal/services/pet"
-	"github.com/stainless-sdks/dedalus-terraform/internal/services/store_order"
-	"github.com/stainless-sdks/dedalus-terraform/internal/services/user"
 )
 
 var _ provider.ProviderWithConfigValidators = (*DedalusProvider)(nil)
@@ -31,8 +28,10 @@ type DedalusProvider struct {
 
 // DedalusProviderModel describes the provider data model.
 type DedalusProviderModel struct {
-	BaseURL types.String `tfsdk:"base_url" json:"base_url,optional"`
-	APIKey  types.String `tfsdk:"api_key" json:"api_key,optional"`
+	BaseURL      types.String `tfsdk:"base_url" json:"base_url,optional"`
+	APIKey       types.String `tfsdk:"api_key" json:"api_key,optional"`
+	XAPIKey      types.String `tfsdk:"x_api_key" json:"x_api_key,optional"`
+	DedalusOrgID types.String `tfsdk:"dedalus_org_id" json:"dedalus_org_id,optional"`
 }
 
 func (p *DedalusProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -48,6 +47,12 @@ func ProviderSchema(ctx context.Context) schema.Schema {
 				Optional:    true,
 			},
 			"api_key": schema.StringAttribute{
+				Optional: true,
+			},
+			"x_api_key": schema.StringAttribute{
+				Optional: true,
+			},
+			"dedalus_org_id": schema.StringAttribute{
 				Optional: true,
 			},
 		},
@@ -74,15 +79,20 @@ func (p *DedalusProvider) Configure(ctx context.Context, req provider.ConfigureR
 
 	if !data.APIKey.IsNull() && !data.APIKey.IsUnknown() {
 		opts = append(opts, option.WithAPIKey(data.APIKey.ValueString()))
-	} else if o, ok := os.LookupEnv("PETSTORE_API_KEY"); ok {
+	} else if o, ok := os.LookupEnv("DEDALUS_API_KEY"); ok {
 		opts = append(opts, option.WithAPIKey(o))
-	} else {
-		resp.Diagnostics.AddAttributeError(
-			path.Root("api_key"),
-			"Missing api_key value",
-			"The api_key field is required. Set it in provider configuration or via the \"PETSTORE_API_KEY\" environment variable.",
-		)
-		return
+	}
+
+	if !data.XAPIKey.IsNull() && !data.XAPIKey.IsUnknown() {
+		opts = append(opts, option.WithXAPIKey(data.XAPIKey.ValueString()))
+	} else if o, ok := os.LookupEnv("DEDALUS_X_API_KEY"); ok {
+		opts = append(opts, option.WithXAPIKey(o))
+	}
+
+	if !data.DedalusOrgID.IsNull() && !data.DedalusOrgID.IsUnknown() {
+		opts = append(opts, option.WithDedalusOrgID(data.DedalusOrgID.ValueString()))
+	} else if o, ok := os.LookupEnv("DEDALUS_ORG_ID"); ok {
+		opts = append(opts, option.WithDedalusOrgID(o))
 	}
 
 	client := dedalus.NewClient(
@@ -99,17 +109,14 @@ func (p *DedalusProvider) ConfigValidators(_ context.Context) []provider.ConfigV
 
 func (p *DedalusProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		pet.NewResource,
-		store_order.NewResource,
-		user.NewResource,
+		workspace.NewResource,
 	}
 }
 
 func (p *DedalusProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
-		pet.NewPetDataSource,
-		store_order.NewStoreOrderDataSource,
-		user.NewUserDataSource,
+		workspace.NewWorkspaceDataSource,
+		workspace.NewWorkspacesDataSource,
 	}
 }
 

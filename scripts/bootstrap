@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
@@ -18,11 +18,9 @@ if [ -f "Brewfile" ] && [ "$(uname -s)" = "Darwin" ] && [ "$SKIP_BREW" != "1" ] 
     echo
   }
 fi
-echo "==> Installing Go dependencies…"
 
-# Set GOPRIVATE if the repository appears to be private
-REPO_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://github.com/dedalus-labs/dedalus-go)
-if [ "$REPO_STATUS" = "404" ]; then
-  export GOPRIVATE=github.com/dedalus-labs/dedalus-go
-fi
+# Mark the necessary Go modules as private to avoid Go's proxy
+export GOPRIVATE="${GOPRIVATE:+$GOPRIVATE,}github.com/dedalus-labs/dedalus-go,github.com/stainless-sdks/dedalus-go"
+
+echo "==> Installing Go dependencies…"
 go mod tidy -e || true

@@ -3,6 +3,7 @@ package apijson
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"math/big"
 	"reflect"
@@ -18,7 +19,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/tidwall/gjson"
 
-	"github.com/stainless-sdks/dedalus-terraform/internal/customfield"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/customfield"
+	type_helpers "github.com/dedalus-labs/terraform-provider-dedalus/internal/types"
 )
 
 // decoders is a synchronized map with roughly the following type:
@@ -94,10 +96,10 @@ const (
 	// Some values had to fudged a bit, for example by converting a string to an
 	// int, or an enum with extra values.
 	loose exactness = iota
-	// There are some extra arguments, but other wise it matches the union.
-	extras
 	// Exactly right.
 	exact
+	// There are some extra arguments, but other wise it matches the union.
+	// extras
 )
 
 type decoderFunc func(node gjson.Result, value reflect.Value, state *decoderState) error
@@ -478,23 +480,44 @@ func (d *decoderBuilder) newTerraformTypeDecoder(t reflect.Type) decoderFunc {
 
 	if (t == reflect.TypeOf(basetypes.Float64Value{})) {
 		return d.decodeTerraformPrimitive(func() any { return types.Float64Null() }, func(node gjson.Result, value reflect.Value, state *decoderState) error {
-			// use ParseFloat just to validate that it's a valid number
-			_, err := strconv.ParseFloat(node.Str, 64)
-			if node.Type == gjson.JSON || (node.Type == gjson.String && err != nil) {
-				return fmt.Errorf("apijson: failed to parse types.Float64Value")
+			var rawVal string
+			switch node.Type {
+			case gjson.String:
+				rawVal = node.Str
+			case gjson.Number:
+				rawVal = node.Raw
+			default:
+				return errors.New("apijson: failed to parse as basetypes.Float64Value")
 			}
-			value.Set(reflect.ValueOf(types.Float64Value(node.Float())))
+
+			f64Val, err := type_helpers.NewFloat64ValueFromString(rawVal)
+			if err != nil {
+				return fmt.Errorf("apijson: %w", err)
+			}
+
+			value.Set(reflect.ValueOf(f64Val))
 			return nil
 		})
 	}
 
 	if (t == reflect.TypeOf(basetypes.NumberValue{})) {
 		return d.decodeTerraformPrimitive(func() any { return types.NumberNull() }, func(node gjson.Result, value reflect.Value, state *decoderState) error {
-			value.Set(reflect.ValueOf(types.NumberValue(big.NewFloat(node.Float()))))
-			_, err := strconv.ParseFloat(node.Str, 64)
-			if node.Type == gjson.JSON || (node.Type == gjson.String && err != nil) {
-				return fmt.Errorf("apijson: failed to parse types.Float64Value")
+			var rawVal string
+			switch node.Type {
+			case gjson.String:
+				rawVal = node.Str
+			case gjson.Number:
+				rawVal = node.Raw
+			default:
+				return errors.New("apijson: failed to parse as basetypes.NumberValue")
 			}
+
+			numberVal, err := type_helpers.NewNumberValueFromString(rawVal)
+			if err != nil {
+				return fmt.Errorf("apijson: %w", err)
+			}
+
+			value.Set(reflect.ValueOf(numberVal))
 			return nil
 		})
 	}
@@ -996,7 +1019,7 @@ func shouldUpdatePrimitive(value reflect.Value, behavior TerraformUpdateBehavior
 
 func (d *decoderBuilder) newStructTypeDecoder(t reflect.Type) decoderFunc {
 	// map of json field name to struct field decoders
-	decoderFields := map[string]decoderField{}
+	decoderFields := map[string][]decoderField{}
 	extraDecoder := (*decoderField)(nil)
 	inlineDecoder := (*decoderField)(nil)
 
@@ -1074,7 +1097,7 @@ func (d *decoderBuilder) newStructTypeDecoder(t reflect.Type) decoderFunc {
 					d.dateFormat = "2006-01-02"
 				}
 			}
-			decoderFields[ptag.name] = decoderField{ptag, d.typeDecoder(field.Type), idx, field.Name}
+			decoderFields[ptag.name] = append(decoderFields[ptag.name], decoderField{ptag, d.typeDecoder(field.Type), idx, field.Name})
 			d.dateFormat = oldFormat
 			d.updateBehavior = Always // reset the flag
 		}
@@ -1108,45 +1131,46 @@ func (d *decoderBuilder) newStructTypeDecoder(t reflect.Type) decoderFunc {
 		nodeMap := node.Map()
 
 		for fieldName, itemNode := range nodeMap {
-			df, explicit := decoderFields[fieldName]
-			var (
-				dest reflect.Value
-				fn   decoderFunc
-			)
-			if explicit {
-				fn = df.fn
-				dest = value.FieldByIndex(df.idx)
-			}
-			if !explicit && extraDecoder != nil {
-				dest = reflect.New(typedExtraType.Elem()).Elem()
-				fn = extraDecoder.fn
-			}
+			dfs, explicit := decoderFields[fieldName]
+			for i := range max(len(dfs), 1) {
+				dest, fn := reflect.Value{}, (decoderFunc)(nil)
+				if explicit {
+					df := dfs[i]
+					fn = df.fn
+					dest = value.FieldByIndex(df.idx)
+				}
+				if !explicit && extraDecoder != nil {
+					dest = reflect.New(typedExtraType.Elem()).Elem()
+					fn = extraDecoder.fn
+				}
 
-			if dest.IsValid() {
-				_ = fn(itemNode, dest, state)
-			}
+				if dest.IsValid() {
+					_ = fn(itemNode, dest, state)
+				}
 
-			if !explicit && extraDecoder != nil {
-				typedExtraFields.SetMapIndex(reflect.ValueOf(fieldName), dest)
+				if !explicit && extraDecoder != nil {
+					typedExtraFields.SetMapIndex(reflect.ValueOf(fieldName), dest)
+				}
 			}
 		}
 
 		// Handle struct fields that are not present in the JSON
 		// this is in case they should be initialized to a "null" value
 		// that is different from the zero value
-		for fieldName, df := range decoderFields {
-			_, existsInJson := nodeMap[fieldName]
-			if existsInJson {
+		for fieldName, dfs := range decoderFields {
+			if _, existsInJson := nodeMap[fieldName]; existsInJson {
 				continue
 			}
-			fn := df.fn
-			dest := value.FieldByIndex(df.idx)
+			for _, df := range dfs {
+				fn := df.fn
+				dest := value.FieldByIndex(df.idx)
 
-			// note that we don't include pointers to structs, because
-			// that could be recursive and would cause an infinite loop.
-			// if dest.IsValid() && dest.Kind() == reflect.Struct {
-			if dest.IsValid() {
-				_ = fn(gjson.Result{}, dest, state)
+				// note that we don't include pointers to structs, because
+				// that could be recursive and would cause an infinite loop.
+				// if dest.IsValid() && dest.Kind() == reflect.Struct {
+				if dest.IsValid() {
+					_ = fn(gjson.Result{}, dest, state)
+				}
 			}
 		}
 		if extraDecoder != nil && typedExtraFields.Len() > 0 {
@@ -1306,7 +1330,7 @@ func (d *decoderBuilder) newCustomTimeTypeDecoder(t reflect.Type) decoderFunc {
 	}
 }
 
-func setUnexportedField(field reflect.Value, value interface{}) {
+func setUnexportedField(field reflect.Value, value any) {
 	reflect.NewAt(field.Type(), unsafe.Pointer(field.UnsafeAddr())).Elem().Set(reflect.ValueOf(value))
 }
 
@@ -1349,7 +1373,7 @@ func (d *decoderBuilder) inferTerraformAttrFromValue(node gjson.Result) (attr.Va
 		if err == nil {
 			return types.Int64Value(node.Int()), nil
 		}
-		return types.Float64Value(node.Float()), nil
+		return type_helpers.NewFloat64ValueFromString(node.String())
 	case gjson.String:
 		return types.StringValue(node.String()), nil
 	case gjson.JSON:

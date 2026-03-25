@@ -16,7 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/hashicorp/terraform-plugin-go/tftypes"
 
-	"github.com/stainless-sdks/dedalus-terraform/internal/customfield"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/customfield"
 )
 
 func P[T any](v T) *T { return &v }
@@ -167,7 +167,7 @@ func TestPlanReadAndWrite(t *testing.T) {
 	})
 }
 
-func EnsurePlanEquals(t *testing.T, diags diag.Diagnostics, expected interface{}, actual interface{}) {
+func EnsurePlanEquals(t *testing.T, diags diag.Diagnostics, expected any, actual any) {
 	ExpectNoDiagnostics(t, diags)
 
 	if !reflect.DeepEqual(actual, expected) {
