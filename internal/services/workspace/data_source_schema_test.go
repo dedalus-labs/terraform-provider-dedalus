@@ -14,7 +14,6 @@ func TestWorkspaceDataSourceModelSchemaParity(t *testing.T) {
 	t.Parallel()
 	model := (*workspace.WorkspaceDataSourceModel)(nil)
 	schema := workspace.DataSourceSchema(context.TODO())
-	t.Skip("timeouts parity: Stainless codegen emits opaque timeouts.Value in model but StringAttribute per-op in schema")
 	errs := test_helpers.ValidateDataSourceModelSchemaIntegrity(model, schema)
 	errs.Report(t)
 }
