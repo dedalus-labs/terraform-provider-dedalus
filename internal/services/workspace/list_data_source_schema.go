@@ -41,12 +41,12 @@ func ListDataSourceSchema(ctx context.Context) schema.Schema {
 							CustomType: timetypes.RFC3339Type{},
 						},
 						"desired_state": schema.StringAttribute{
-							Description: `Available values: "active", "inactive", "destroyed".`,
+							Description: `Available values: "running", "sleeping", "destroyed".`,
 							Computed:    true,
 							Validators: []validator.String{
 								stringvalidator.OneOfCaseInsensitive(
-									"active",
-									"inactive",
+									"running",
+									"sleeping",
 									"destroyed",
 								),
 							},

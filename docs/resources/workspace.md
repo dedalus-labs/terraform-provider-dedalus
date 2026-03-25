@@ -26,7 +26,7 @@ resource "dedalus_workspace" "example_workspace" {
 ### Required
 
 - `memory_mib` (Number) Memory in MiB.
-- `storage_gib` (Number)
+- `storage_gib` (Number) Storage in GiB.
 - `vcpu` (Number) CPU in vCPUs.
 
 ### Optional
@@ -35,7 +35,7 @@ resource "dedalus_workspace" "example_workspace" {
 
 ### Read-Only
 
-- `desired_state` (String) Available values: "active", "inactive", "destroyed".
+- `desired_state` (String) Available values: "running", "sleeping", "destroyed".
 - `id` (String) The ID of this resource.
 - `status` (Attributes) (see [below for nested schema](#nestedatt--status))
 - `workspace_id` (String)
