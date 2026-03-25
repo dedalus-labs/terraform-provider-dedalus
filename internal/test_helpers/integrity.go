@@ -11,6 +11,8 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
+	ds_timeouts "github.com/hashicorp/terraform-plugin-framework-timeouts/datasource/timeouts"
+	rs_timeouts "github.com/hashicorp/terraform-plugin-framework-timeouts/resource/timeouts"
 	"github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	ds "github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -436,6 +438,9 @@ func walkAttriCollection(path path, attribute ds.Attribute, kind reflect.Kind, m
 
 func walkNested(path path, attribute ds.NestedAttribute, kind reflect.Kind, model reflect.Type) (errs codingerrors) {
 	model = deref(model)
+	if model.ConvertibleTo(reflect.TypeOf(rs_timeouts.Value{})) || model.ConvertibleTo(reflect.TypeOf(ds_timeouts.Value{})) {
+		return
+	}
 	idx, exp := []string{}, "{...}"
 	basetype, reflectype := reflect.TypeOf((*basetypes.ObjectValuable)(nil)), reflect.Struct
 
