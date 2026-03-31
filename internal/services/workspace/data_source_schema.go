@@ -91,6 +91,7 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 				},
 			},
 			"timeouts": timeouts.AttributesWithOpts(ctx, timeouts.Opts{
+				Read:            true,
 				ReadDescription: "The timeout for the operation, default: 600 seconds",
 			}),
 		},
