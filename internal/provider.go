@@ -8,7 +8,7 @@ import (
 
 	"github.com/dedalus-labs/dedalus-go"
 	"github.com/dedalus-labs/dedalus-go/option"
-	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/workspace"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/machine"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
@@ -109,14 +109,14 @@ func (p *DedalusProvider) ConfigValidators(_ context.Context) []provider.ConfigV
 
 func (p *DedalusProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		workspace.NewResource,
+		machine.NewResource,
 	}
 }
 
 func (p *DedalusProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
-		workspace.NewWorkspaceDataSource,
-		workspace.NewWorkspacesDataSource,
+		machine.NewMachineDataSource,
+		machine.NewMachinesDataSource,
 	}
 }
 
