@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package workspace
+package machine
 
 import (
 	"context"
@@ -16,7 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 )
 
-var _ resource.ResourceWithConfigValidators = (*WorkspaceResource)(nil)
+var _ resource.ResourceWithConfigValidators = (*MachineResource)(nil)
 
 func ResourceSchema(ctx context.Context) schema.Schema {
 	return schema.Schema{
@@ -25,7 +25,7 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 				Computed:      true,
 				PlanModifiers: []planmodifier.String{stringplanmodifier.UseStateForUnknown()},
 			},
-			"workspace_id": schema.StringAttribute{
+			"machine_id": schema.StringAttribute{
 				Computed:      true,
 				PlanModifiers: []planmodifier.String{stringplanmodifier.UseStateForUnknown()},
 			},
@@ -54,7 +54,7 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 			},
 			"status": schema.SingleNestedAttribute{
 				Computed:   true,
-				CustomType: customfield.NewNestedObjectType[WorkspaceStatusModel](ctx),
+				CustomType: customfield.NewNestedObjectType[MachineStatusModel](ctx),
 				Attributes: map[string]schema.Attribute{
 					"last_progress_at": schema.StringAttribute{
 						Computed:   true,
@@ -109,10 +109,10 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 	}
 }
 
-func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *MachineResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = ResourceSchema(ctx)
 }
 
-func (r *WorkspaceResource) ConfigValidators(_ context.Context) []resource.ConfigValidator {
+func (r *MachineResource) ConfigValidators(_ context.Context) []resource.ConfigValidator {
 	return []resource.ConfigValidator{}
 }

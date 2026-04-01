@@ -29,16 +29,16 @@ terraform {
 
 # Initialize the provider
 provider "dedalus" {
-  # Dedalus API key sent as Authorization: Bearer <key>.
+  # Dedalus API key sent as Authorization Bearer.
   api_key = "My API Key" # or set DEDALUS_API_KEY env variable
-  # Dedalus API key sent as x-api-key.
+  # Dedalus API key sent as x-api-key header.
   x_api_key = "My X API Key" # or set DEDALUS_X_API_KEY env variable
-  # Organization ID header applied to all DCS requests.
+  # Organization ID header for all DCS requests.
   dedalus_org_id = "My Dedalus Org ID" # or set DEDALUS_ORG_ID env variable
 }
 
 # Configure a resource
-resource "dedalus_workspace" "example_workspace" {
+resource "dedalus_machine" "example_machine" {
   memory_mib = 2048
   storage_gib = 10
   vcpu = 1

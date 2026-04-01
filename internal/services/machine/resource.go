@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package workspace
+package machine
 
 import (
 	"context"
@@ -19,24 +19,24 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
-var _ resource.ResourceWithConfigure = (*WorkspaceResource)(nil)
-var _ resource.ResourceWithModifyPlan = (*WorkspaceResource)(nil)
-var _ resource.ResourceWithImportState = (*WorkspaceResource)(nil)
+var _ resource.ResourceWithConfigure = (*MachineResource)(nil)
+var _ resource.ResourceWithModifyPlan = (*MachineResource)(nil)
+var _ resource.ResourceWithImportState = (*MachineResource)(nil)
 
 func NewResource() resource.Resource {
-	return &WorkspaceResource{}
+	return &MachineResource{}
 }
 
-// WorkspaceResource defines the resource implementation.
-type WorkspaceResource struct {
+// MachineResource defines the resource implementation.
+type MachineResource struct {
 	client *dedalus.Client
 }
 
-func (r *WorkspaceResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_workspace"
+func (r *MachineResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_machine"
 }
 
-func (r *WorkspaceResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *MachineResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -55,8 +55,8 @@ func (r *WorkspaceResource) Configure(ctx context.Context, req resource.Configur
 	r.client = client
 }
 
-func (r *WorkspaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *WorkspaceModel
+func (r *MachineResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var data *MachineModel
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
 
@@ -81,9 +81,9 @@ func (r *WorkspaceResource) Create(ctx context.Context, req resource.CreateReque
 		return
 	}
 	res := new(http.Response)
-	_, err = r.client.Workspaces.New(
+	_, err = r.client.Machines.New(
 		ctx,
-		dedalus.WorkspaceNewParams{},
+		dedalus.MachineNewParams{},
 		option.WithRequestBody("application/json", dataBytes),
 		option.WithResponseBodyInto(&res),
 		option.WithMiddleware(logging.Middleware(ctx)),
@@ -98,13 +98,13 @@ func (r *WorkspaceResource) Create(ctx context.Context, req resource.CreateReque
 		resp.Diagnostics.AddError("failed to deserialize http request", err.Error())
 		return
 	}
-	data.ID = data.WorkspaceID
+	data.ID = data.MachineID
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *WorkspaceResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *WorkspaceModel
+func (r *MachineResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var data *MachineModel
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
 
@@ -112,7 +112,7 @@ func (r *WorkspaceResource) Update(ctx context.Context, req resource.UpdateReque
 		return
 	}
 
-	var state *WorkspaceModel
+	var state *MachineModel
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
 
@@ -137,10 +137,11 @@ func (r *WorkspaceResource) Update(ctx context.Context, req resource.UpdateReque
 		return
 	}
 	res := new(http.Response)
-	_, err = r.client.Workspaces.Update(
+	_, err = r.client.Machines.Update(
 		ctx,
-		data.WorkspaceID.ValueString(),
-		dedalus.WorkspaceUpdateParams{},
+		dedalus.MachineUpdateParams{
+			MachineID: data.MachineID.ValueString(),
+		},
 		option.WithRequestBody("application/json", dataBytes),
 		option.WithResponseBodyInto(&res),
 		option.WithMiddleware(logging.Middleware(ctx)),
@@ -155,13 +156,13 @@ func (r *WorkspaceResource) Update(ctx context.Context, req resource.UpdateReque
 		resp.Diagnostics.AddError("failed to deserialize http request", err.Error())
 		return
 	}
-	data.ID = data.WorkspaceID
+	data.ID = data.MachineID
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *WorkspaceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var data *WorkspaceModel
+func (r *MachineResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var data *MachineModel
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
 
@@ -181,9 +182,11 @@ func (r *WorkspaceResource) Read(ctx context.Context, req resource.ReadRequest, 
 	}
 
 	res := new(http.Response)
-	_, err := r.client.Workspaces.Get(
+	_, err := r.client.Machines.Get(
 		ctx,
-		data.WorkspaceID.ValueString(),
+		dedalus.MachineGetParams{
+			MachineID: data.MachineID.ValueString(),
+		},
 		option.WithResponseBodyInto(&res),
 		option.WithMiddleware(logging.Middleware(ctx)),
 	)
@@ -202,13 +205,13 @@ func (r *WorkspaceResource) Read(ctx context.Context, req resource.ReadRequest, 
 		resp.Diagnostics.AddError("failed to deserialize http request", err.Error())
 		return
 	}
-	data.ID = data.WorkspaceID
+	data.ID = data.MachineID
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *WorkspaceResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var data *WorkspaceModel
+func (r *MachineResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data *MachineModel
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
 
@@ -227,28 +230,29 @@ func (r *WorkspaceResource) Delete(ctx context.Context, req resource.DeleteReque
 		defer cancel()
 	}
 
-	_, err := r.client.Workspaces.Delete(
+	_, err := r.client.Machines.Delete(
 		ctx,
-		data.WorkspaceID.ValueString(),
-		dedalus.WorkspaceDeleteParams{},
+		dedalus.MachineDeleteParams{
+			MachineID: data.MachineID.ValueString(),
+		},
 		option.WithMiddleware(logging.Middleware(ctx)),
 	)
 	if err != nil {
 		resp.Diagnostics.AddError("failed to make http request", err.Error())
 		return
 	}
-	data.ID = data.WorkspaceID
+	data.ID = data.MachineID
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *WorkspaceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	var data = new(WorkspaceModel)
+func (r *MachineResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	var data = new(MachineModel)
 
 	path := ""
 	diags := importpath.ParseImportID(
 		req.ID,
-		"<workspace_id>",
+		"<machine_id>",
 		&path,
 	)
 	resp.Diagnostics.Append(diags...)
@@ -256,7 +260,7 @@ func (r *WorkspaceResource) ImportState(ctx context.Context, req resource.Import
 		return
 	}
 
-	data.WorkspaceID = types.StringValue(path)
+	data.MachineID = types.StringValue(path)
 
 	operationTimeout, diags := data.Timeouts.Read(ctx, time.Duration(2*time.Minute))
 	resp.Diagnostics.Append(diags...)
@@ -270,9 +274,11 @@ func (r *WorkspaceResource) ImportState(ctx context.Context, req resource.Import
 	}
 
 	res := new(http.Response)
-	_, err := r.client.Workspaces.Get(
+	_, err := r.client.Machines.Get(
 		ctx,
-		path,
+		dedalus.MachineGetParams{
+			MachineID: path,
+		},
 		option.WithResponseBodyInto(&res),
 		option.WithMiddleware(logging.Middleware(ctx)),
 	)
@@ -286,11 +292,11 @@ func (r *WorkspaceResource) ImportState(ctx context.Context, req resource.Import
 		resp.Diagnostics.AddError("failed to deserialize http request", err.Error())
 		return
 	}
-	data.ID = data.WorkspaceID
+	data.ID = data.MachineID
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *WorkspaceResource) ModifyPlan(_ context.Context, _ resource.ModifyPlanRequest, _ *resource.ModifyPlanResponse) {
+func (r *MachineResource) ModifyPlan(_ context.Context, _ resource.ModifyPlanRequest, _ *resource.ModifyPlanResponse) {
 
 }

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package workspace
+package machine
 
 import (
 	"context"
@@ -14,7 +14,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 )
 
-var _ datasource.DataSourceWithConfigValidators = (*WorkspaceDataSource)(nil)
+var _ datasource.DataSourceWithConfigValidators = (*MachineDataSource)(nil)
 
 func DataSourceSchema(ctx context.Context) schema.Schema {
 	return schema.Schema{
@@ -22,7 +22,7 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 			"id": schema.StringAttribute{
 				Computed: true,
 			},
-			"workspace_id": schema.StringAttribute{
+			"machine_id": schema.StringAttribute{
 				Required: true,
 			},
 			"desired_state": schema.StringAttribute{
@@ -49,7 +49,7 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 			},
 			"status": schema.SingleNestedAttribute{
 				Computed:   true,
-				CustomType: customfield.NewNestedObjectType[WorkspaceStatusDataSourceModel](ctx),
+				CustomType: customfield.NewNestedObjectType[MachineStatusDataSourceModel](ctx),
 				Attributes: map[string]schema.Attribute{
 					"last_progress_at": schema.StringAttribute{
 						Computed:   true,
@@ -98,10 +98,10 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 	}
 }
 
-func (d *WorkspaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *MachineDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = DataSourceSchema(ctx)
 }
 
-func (d *WorkspaceDataSource) ConfigValidators(_ context.Context) []datasource.ConfigValidator {
+func (d *MachineDataSource) ConfigValidators(_ context.Context) []datasource.ConfigValidator {
 	return []datasource.ConfigValidator{}
 }
