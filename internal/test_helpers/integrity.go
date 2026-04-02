@@ -461,6 +461,9 @@ func walkNested(path path, attribute ds.NestedAttribute, kind reflect.Kind, mode
 	} else if model.Implements(basetype.Elem()) {
 		errs = append(errs, checkCustom(append(path, idx...), &attri{attribute}, model)...)
 		model = genericParam(model, 0)
+		if model == reflect.TypeOf(basetypes.ObjectValue{}) {
+			return errs
+		}
 	}
 
 	if model.Kind() != reflect.Struct {
@@ -537,6 +540,9 @@ func walk(path path, attribute attrlike, model reflect.Type) (errs codingerrors)
 		if model.Implements(reflect.TypeOf((*basetypes.ObjectValuable)(nil)).Elem()) {
 			errs = append(errs, checkCustom(path, attribute, model)...)
 			model = genericParam(model, 0)
+			if model == reflect.TypeOf(basetypes.ObjectValue{}) {
+				return errs
+			}
 		} else if kind != reflect.Struct {
 			return append(errs, &mismatch{path: path, expected: "Object", actual: model})
 		}
