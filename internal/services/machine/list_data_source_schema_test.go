@@ -11,7 +11,6 @@ import (
 )
 
 func TestMachinesDataSourceModelSchemaParity(t *testing.T) {
-	t.Skip("codegen bug: timeouts.Value is opaque to parity walker, pending upstream fix")
 	t.Parallel()
 	model := (*machine.MachinesDataSourceModel)(nil)
 	schema := machine.ListDataSourceSchema(context.TODO())
