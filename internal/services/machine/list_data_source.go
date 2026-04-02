@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package workspace
+package machine
 
 import (
 	"context"
@@ -14,21 +14,21 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 )
 
-type WorkspacesDataSource struct {
+type MachinesDataSource struct {
 	client *dedalus.Client
 }
 
-var _ datasource.DataSourceWithConfigure = (*WorkspacesDataSource)(nil)
+var _ datasource.DataSourceWithConfigure = (*MachinesDataSource)(nil)
 
-func NewWorkspacesDataSource() datasource.DataSource {
-	return &WorkspacesDataSource{}
+func NewMachinesDataSource() datasource.DataSource {
+	return &MachinesDataSource{}
 }
 
-func (d *WorkspacesDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_workspaces"
+func (d *MachinesDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_machines"
 }
 
-func (d *WorkspacesDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (d *MachinesDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -47,8 +47,8 @@ func (d *WorkspacesDataSource) Configure(ctx context.Context, req datasource.Con
 	d.client = client
 }
 
-func (d *WorkspacesDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data *WorkspacesDataSourceModel
+func (d *MachinesDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var data *MachinesDataSourceModel
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
@@ -73,13 +73,13 @@ func (d *WorkspacesDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		return
 	}
 
-	env := WorkspacesItemsListDataSourceEnvelope{}
+	env := MachinesItemsListDataSourceEnvelope{}
 	maxItems := int(data.MaxItems.ValueInt64())
 	acc := []attr.Value{}
 	if maxItems <= 0 {
 		maxItems = 1000
 	}
-	page, err := d.client.Workspaces.List(ctx, params)
+	page, err := d.client.Machines.List(ctx, params)
 	if err != nil {
 		resp.Diagnostics.AddError("failed to make http request", err.Error())
 		return
@@ -104,7 +104,7 @@ func (d *WorkspacesDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	}
 
 	acc = acc[:min(len(acc), maxItems)]
-	result, diags := customfield.NewObjectListFromAttributes[WorkspacesItemsDataSourceModel](ctx, acc)
+	result, diags := customfield.NewObjectListFromAttributes[MachinesItemsDataSourceModel](ctx, acc)
 	resp.Diagnostics.Append(diags...)
 	data.Items = result
 

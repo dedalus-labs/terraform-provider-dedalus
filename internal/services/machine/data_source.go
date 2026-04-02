@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package workspace
+package machine
 
 import (
 	"context"
@@ -16,21 +16,21 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 )
 
-type WorkspaceDataSource struct {
+type MachineDataSource struct {
 	client *dedalus.Client
 }
 
-var _ datasource.DataSourceWithConfigure = (*WorkspaceDataSource)(nil)
+var _ datasource.DataSourceWithConfigure = (*MachineDataSource)(nil)
 
-func NewWorkspaceDataSource() datasource.DataSource {
-	return &WorkspaceDataSource{}
+func NewMachineDataSource() datasource.DataSource {
+	return &MachineDataSource{}
 }
 
-func (d *WorkspaceDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_workspace"
+func (d *MachineDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_machine"
 }
 
-func (d *WorkspaceDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (d *MachineDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -49,8 +49,8 @@ func (d *WorkspaceDataSource) Configure(ctx context.Context, req datasource.Conf
 	d.client = client
 }
 
-func (d *WorkspaceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data *WorkspaceDataSourceModel
+func (d *MachineDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var data *MachineDataSourceModel
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
@@ -69,10 +69,16 @@ func (d *WorkspaceDataSource) Read(ctx context.Context, req datasource.ReadReque
 		defer cancel()
 	}
 
+	params, diags := data.toReadParams(ctx)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	res := new(http.Response)
-	_, err := d.client.Workspaces.Get(
+	_, err := d.client.Machines.Get(
 		ctx,
-		data.WorkspaceID.ValueString(),
+		params,
 		option.WithResponseBodyInto(&res),
 		option.WithMiddleware(logging.Middleware(ctx)),
 	)
@@ -86,7 +92,7 @@ func (d *WorkspaceDataSource) Read(ctx context.Context, req datasource.ReadReque
 		resp.Diagnostics.AddError("failed to deserialize http request", err.Error())
 		return
 	}
-	data.ID = data.WorkspaceID
+	data.ID = data.MachineID
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

@@ -11,8 +11,6 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
-	ds_timeouts "github.com/hashicorp/terraform-plugin-framework-timeouts/datasource/timeouts"
-	rs_timeouts "github.com/hashicorp/terraform-plugin-framework-timeouts/resource/timeouts"
 	"github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	ds "github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -438,9 +436,6 @@ func walkAttriCollection(path path, attribute ds.Attribute, kind reflect.Kind, m
 
 func walkNested(path path, attribute ds.NestedAttribute, kind reflect.Kind, model reflect.Type) (errs codingerrors) {
 	model = deref(model)
-	if model.ConvertibleTo(reflect.TypeOf(rs_timeouts.Value{})) || model.ConvertibleTo(reflect.TypeOf(ds_timeouts.Value{})) {
-		return
-	}
 	idx, exp := []string{}, "{...}"
 	basetype, reflectype := reflect.TypeOf((*basetypes.ObjectValuable)(nil)), reflect.Struct
 
@@ -466,6 +461,9 @@ func walkNested(path path, attribute ds.NestedAttribute, kind reflect.Kind, mode
 	} else if model.Implements(basetype.Elem()) {
 		errs = append(errs, checkCustom(append(path, idx...), &attri{attribute}, model)...)
 		model = genericParam(model, 0)
+		if model == reflect.TypeOf(basetypes.ObjectValue{}) {
+			return errs
+		}
 	}
 
 	if model.Kind() != reflect.Struct {
@@ -542,6 +540,9 @@ func walk(path path, attribute attrlike, model reflect.Type) (errs codingerrors)
 		if model.Implements(reflect.TypeOf((*basetypes.ObjectValuable)(nil)).Elem()) {
 			errs = append(errs, checkCustom(path, attribute, model)...)
 			model = genericParam(model, 0)
+			if model == reflect.TypeOf(basetypes.ObjectValue{}) {
+				return errs
+			}
 		} else if kind != reflect.Struct {
 			return append(errs, &mismatch{path: path, expected: "Object", actual: model})
 		}

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package workspace
+package machine
 
 import (
 	"context"
@@ -15,7 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 )
 
-var _ datasource.DataSourceWithConfigValidators = (*WorkspacesDataSource)(nil)
+var _ datasource.DataSourceWithConfigValidators = (*MachinesDataSource)(nil)
 
 func ListDataSourceSchema(ctx context.Context) schema.Schema {
 	return schema.Schema{
@@ -30,7 +30,7 @@ func ListDataSourceSchema(ctx context.Context) schema.Schema {
 			"items": schema.ListNestedAttribute{
 				Description: "The items returned by the data source",
 				Computed:    true,
-				CustomType:  customfield.NewNestedObjectListType[WorkspacesItemsDataSourceModel](ctx),
+				CustomType:  customfield.NewNestedObjectListType[MachinesItemsDataSourceModel](ctx),
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"id": schema.StringAttribute{
@@ -51,13 +51,16 @@ func ListDataSourceSchema(ctx context.Context) schema.Schema {
 								),
 							},
 						},
+						"machine_id": schema.StringAttribute{
+							Computed: true,
+						},
 						"memory_mib": schema.Int64Attribute{
 							Description: "Memory in MiB.",
 							Computed:    true,
 						},
 						"status": schema.SingleNestedAttribute{
 							Computed:   true,
-							CustomType: customfield.NewNestedObjectType[WorkspacesStatusDataSourceModel](ctx),
+							CustomType: customfield.NewNestedObjectType[MachinesStatusDataSourceModel](ctx),
 							Attributes: map[string]schema.Attribute{
 								"last_progress_at": schema.StringAttribute{
 									Computed:   true,
@@ -105,9 +108,6 @@ func ListDataSourceSchema(ctx context.Context) schema.Schema {
 							Description: "CPU in vCPUs.",
 							Computed:    true,
 						},
-						"workspace_id": schema.StringAttribute{
-							Computed: true,
-						},
 					},
 				},
 			},
@@ -118,10 +118,10 @@ func ListDataSourceSchema(ctx context.Context) schema.Schema {
 	}
 }
 
-func (d *WorkspacesDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *MachinesDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = ListDataSourceSchema(ctx)
 }
 
-func (d *WorkspacesDataSource) ConfigValidators(_ context.Context) []datasource.ConfigValidator {
+func (d *MachinesDataSource) ConfigValidators(_ context.Context) []datasource.ConfigValidator {
 	return []datasource.ConfigValidator{}
 }

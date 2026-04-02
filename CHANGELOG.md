@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.0.2 (2026-04-02)
+
+Full Changelog: [v0.0.1...v0.0.2](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.0.1...v0.0.2)
+
+### Bug Fixes
+
+* **internal:** emit boolean flag in datasource timeout schema opts ([75cd237](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/75cd237e328eeae653d164193555f1686972a8bf))
+* **schema:** remove invalid Read field from datasource timeouts.Opts ([#4](https://github.com/dedalus-labs/terraform-provider-dedalus/issues/4)) ([c37ef1c](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/c37ef1c2ec184c8a29685a92dbfbe1330b278153))
+
+
+### Chores
+
+* **api:** refresh codegen ([2124763](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/21247631bb16586135aada4e2303e4fefd336c46))
+* **api:** rename workspaces to machines ([04b0561](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/04b056180f23bce4555cc494259658da447e9115))
+* **internal:** update multipart form array serialization ([382ef51](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/382ef5112773cc4695d7b7f1ff28e2bb8b7eae66))
+* remove custom code ([f7798cc](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/f7798ccf8fb58aede4c59726942c9f2deff3b03c))
+* **tests:** bump steady to v0.20.1 ([6e7094f](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/6e7094f3faddd3afe41da73f3abb1c7eadb2cdf8))
+* **tests:** bump steady to v0.20.2 ([08dfc04](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/08dfc04c4dcef9070e29201369954b0b274de5cf))
+
 ## 0.0.1 (2026-03-25)
 
 Full Changelog: [v0.0.1...v0.0.1](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.0.1...v0.0.1)

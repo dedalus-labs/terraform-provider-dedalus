@@ -1,45 +1,29 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package workspace
+package machine
 
 import (
 	"context"
 
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/customfield"
-	"github.com/hashicorp/terraform-plugin-framework-timeouts/resource/timeouts"
+	"github.com/hashicorp/terraform-plugin-framework-timeouts/datasource/timeouts"
 	"github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 )
 
-var _ resource.ResourceWithConfigValidators = (*WorkspaceResource)(nil)
+var _ datasource.DataSourceWithConfigValidators = (*MachineDataSource)(nil)
 
-func ResourceSchema(ctx context.Context) schema.Schema {
+func DataSourceSchema(ctx context.Context) schema.Schema {
 	return schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:      true,
-				PlanModifiers: []planmodifier.String{stringplanmodifier.UseStateForUnknown()},
+				Computed: true,
 			},
-			"workspace_id": schema.StringAttribute{
-				Computed:      true,
-				PlanModifiers: []planmodifier.String{stringplanmodifier.UseStateForUnknown()},
-			},
-			"memory_mib": schema.Int64Attribute{
-				Description: "Memory in MiB.",
-				Required:    true,
-			},
-			"storage_gib": schema.Int64Attribute{
-				Description: "Storage in GiB.",
-				Required:    true,
-			},
-			"vcpu": schema.Float64Attribute{
-				Description: "CPU in vCPUs.",
-				Required:    true,
+			"machine_id": schema.StringAttribute{
+				Required: true,
 			},
 			"desired_state": schema.StringAttribute{
 				Description: `Available values: "running", "sleeping", "destroyed".`,
@@ -52,9 +36,20 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 					),
 				},
 			},
+			"memory_mib": schema.Int64Attribute{
+				Description: "Memory in MiB.",
+				Computed:    true,
+			},
+			"storage_gib": schema.Int64Attribute{
+				Computed: true,
+			},
+			"vcpu": schema.Float64Attribute{
+				Description: "CPU in vCPUs.",
+				Computed:    true,
+			},
 			"status": schema.SingleNestedAttribute{
 				Computed:   true,
-				CustomType: customfield.NewNestedObjectType[WorkspaceStatusModel](ctx),
+				CustomType: customfield.NewNestedObjectType[MachineStatusDataSourceModel](ctx),
 				Attributes: map[string]schema.Attribute{
 					"last_progress_at": schema.StringAttribute{
 						Computed:   true,
@@ -95,24 +90,17 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 					},
 				},
 			},
-			"timeouts": timeouts.Attributes(ctx, timeouts.Opts{
-				Create:            true,
-				CreateDescription: "The timeout for the operation, default: 600 seconds",
-				Read:              true,
-				ReadDescription:   "The timeout for the operation, default: 120 seconds",
-				Update:            true,
-				UpdateDescription: "The timeout for the operation, default: 600 seconds",
-				Delete:            true,
-				DeleteDescription: "The timeout for the operation, default: 600 seconds",
+			"timeouts": timeouts.AttributesWithOpts(ctx, timeouts.Opts{
+				ReadDescription: "The timeout for the operation, default: 600 seconds",
 			}),
 		},
 	}
 }
 
-func (r *WorkspaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
-	resp.Schema = ResourceSchema(ctx)
+func (d *MachineDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = DataSourceSchema(ctx)
 }
 
-func (r *WorkspaceResource) ConfigValidators(_ context.Context) []resource.ConfigValidator {
-	return []resource.ConfigValidator{}
+func (d *MachineDataSource) ConfigValidators(_ context.Context) []datasource.ConfigValidator {
+	return []datasource.ConfigValidator{}
 }
