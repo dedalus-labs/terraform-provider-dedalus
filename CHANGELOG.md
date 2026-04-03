@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0 (2026-04-03)
+
+Full Changelog: [v0.0.2...v0.1.0](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.0.2...v0.1.0)
+
+### Features
+
+* add per-resource api permissions to schema description ([3efa1a0](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/3efa1a0f82b922b114fd2377bd451ec44f07abb4))
+
 ## 0.0.2 (2026-04-02)
 
 Full Changelog: [v0.0.1...v0.0.2](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.0.1...v0.0.2)
