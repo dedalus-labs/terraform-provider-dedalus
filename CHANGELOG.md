@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.1.0 (2026-04-22)
+
+Full Changelog: [v0.0.2...v0.1.0](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.0.2...v0.1.0)
+
+### Features
+
+* add per-resource api permissions to schema description ([3efa1a0](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/3efa1a0f82b922b114fd2377bd451ec44f07abb4))
+
+
+### Bug Fixes
+
+* **ci:** in custom setup-go, pass through go-version and cache-dependency-path ([1a0affd](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/1a0affd236016a62b661646b2359e404572ee458))
+* fall back to main branch if linking fails in CI ([de7a902](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/de7a9021701819d83d0a34dc3fac954825e19737))
+* fix for failing to drop invalid module replace in link script ([3d5986b](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/3d5986bec0e6033eaa6b37d93e22253d17c78934))
+* fix quoting typo ([24d23fa](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/24d23fa9ca7624f9251a775f564185aa3143f524))
+* **tests:** update hc-install to fix PGP key mismatch ([3158857](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/31588571ea57000c60f55f84f95774d14dea68d1))
+
+
+### Chores
+
+* **ci:** remove release-doctor workflow ([95af827](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/95af827ad4e9561ae908cf722ff5af167372ec04))
+* **internal:** more robust bootstrap script ([c860d46](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/c860d46c2a17643cc38df5c290f200d98feb5944))
+* pin go releaser version ([22897ca](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/22897ca94132b9b8d7e6290b1e0332b526469af5))
+* **tests:** bump steady to v0.22.1 ([097c14c](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/097c14cc83a8dbf1bb8013db7dfb8a1f6c553f54))
+
 ## 0.0.2 (2026-04-02)
 
 Full Changelog: [v0.0.1...v0.0.2](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.0.1...v0.0.2)
