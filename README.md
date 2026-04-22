@@ -22,7 +22,7 @@ terraform {
   required_providers {
     dedalus = {
       source  = "dedalus-labs/dedalus"
-      version = "~> 0.0.2"
+      version = "~> 0.1.0"
     }
   }
 }
