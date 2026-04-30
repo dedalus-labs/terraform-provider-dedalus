@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.1 (2026-04-30)
+
+Full Changelog: [v0.1.0...v0.1.1](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.1.0...v0.1.1)
+
+### Chores
+
+* add local tmpfile directory ([f3799af](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/f3799afb773c443b13d1df132808825017bb959b))
+* **internal:** codegen related update ([74e669b](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/74e669b30ecfadc8fecbd5494f7c567535741d48))
+
 ## 0.1.0 (2026-04-22)
 
 Full Changelog: [v0.0.2...v0.1.0](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.0.2...v0.1.0)
