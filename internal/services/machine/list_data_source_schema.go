@@ -36,6 +36,13 @@ func ListDataSourceSchema(ctx context.Context) schema.Schema {
 						"id": schema.StringAttribute{
 							Computed: true,
 						},
+						"autosleep_seconds": schema.Int64Attribute{
+							Description: "Seconds of inactivity before autosleep. 0 disables autosleep.",
+							Computed:    true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 9223372036),
+							},
+						},
 						"created_at": schema.StringAttribute{
 							Computed:   true,
 							CustomType: timetypes.RFC3339Type{},

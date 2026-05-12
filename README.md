@@ -42,6 +42,7 @@ resource "dedalus_machine" "example_machine" {
   memory_mib = 2048
   storage_gib = 10
   vcpu = 1
+  autosleep = "autosleep"
 }
 ```
 

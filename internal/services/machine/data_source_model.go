@@ -14,14 +14,15 @@ import (
 )
 
 type MachineDataSourceModel struct {
-	ID           types.String                                           `tfsdk:"id" path:"machine_id,computed"`
-	MachineID    types.String                                           `tfsdk:"machine_id" path:"machine_id,required"`
-	DesiredState types.String                                           `tfsdk:"desired_state" json:"desired_state,computed"`
-	MemoryMiB    types.Int64                                            `tfsdk:"memory_mib" json:"memory_mib,computed"`
-	StorageGiB   types.Int64                                            `tfsdk:"storage_gib" json:"storage_gib,computed"`
-	VCPU         types.Float64                                          `tfsdk:"vcpu" json:"vcpu,computed"`
-	Status       customfield.NestedObject[MachineStatusDataSourceModel] `tfsdk:"status" json:"status,computed"`
-	Timeouts     timeouts.Value                                         `tfsdk:"timeouts"`
+	ID               types.String                                           `tfsdk:"id" path:"machine_id,computed"`
+	MachineID        types.String                                           `tfsdk:"machine_id" path:"machine_id,required"`
+	AutosleepSeconds types.Int64                                            `tfsdk:"autosleep_seconds" json:"autosleep_seconds,computed"`
+	DesiredState     types.String                                           `tfsdk:"desired_state" json:"desired_state,computed"`
+	MemoryMiB        types.Int64                                            `tfsdk:"memory_mib" json:"memory_mib,computed"`
+	StorageGiB       types.Int64                                            `tfsdk:"storage_gib" json:"storage_gib,computed"`
+	VCPU             types.Float64                                          `tfsdk:"vcpu" json:"vcpu,computed"`
+	Status           customfield.NestedObject[MachineStatusDataSourceModel] `tfsdk:"status" json:"status,computed"`
+	Timeouts         timeouts.Value                                         `tfsdk:"timeouts"`
 }
 
 func (m *MachineDataSourceModel) toReadParams(_ context.Context) (params dedalus.MachineGetParams, diags diag.Diagnostics) {
