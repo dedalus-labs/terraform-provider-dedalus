@@ -22,7 +22,7 @@ terraform {
   required_providers {
     dedalus = {
       source  = "dedalus-labs/dedalus"
-      version = "~> 0.1.0"
+      version = "~> 0.2.0"
     }
   }
 }
@@ -42,6 +42,7 @@ resource "dedalus_machine" "example_machine" {
   memory_mib = 2048
   storage_gib = 10
   vcpu = 1
+  autosleep = "autosleep"
 }
 ```
 

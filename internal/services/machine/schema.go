@@ -8,6 +8,7 @@ import (
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/customfield"
 	"github.com/hashicorp/terraform-plugin-framework-timeouts/resource/timeouts"
 	"github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -40,6 +41,17 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 			"vcpu": schema.Float64Attribute{
 				Description: "CPU in vCPUs.",
 				Required:    true,
+			},
+			"autosleep": schema.StringAttribute{
+				Description: `Idle window before autosleep. Accepts fixed duration units like 30s, 30m, 2h, 7d3h4s, or 1w3d, raw seconds ("1800"), or never to disable.`,
+				Optional:    true,
+			},
+			"autosleep_seconds": schema.Int64Attribute{
+				Description: "Seconds of inactivity before autosleep. 0 disables autosleep.",
+				Computed:    true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 9223372036),
+				},
 			},
 			"desired_state": schema.StringAttribute{
 				Description: `Available values: "running", "sleeping", "destroyed".`,

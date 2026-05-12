@@ -30,14 +30,15 @@ func (m *MachinesDataSourceModel) toListParams(_ context.Context) (params dedalu
 }
 
 type MachinesItemsDataSourceModel struct {
-	ID           types.String                                            `tfsdk:"id" json:"machine_id,computed"`
-	CreatedAt    timetypes.RFC3339                                       `tfsdk:"created_at" json:"created_at,computed" format:"date-time"`
-	DesiredState types.String                                            `tfsdk:"desired_state" json:"desired_state,computed"`
-	MachineID    types.String                                            `tfsdk:"machine_id" json:"machine_id,computed"`
-	MemoryMiB    types.Int64                                             `tfsdk:"memory_mib" json:"memory_mib,computed"`
-	Status       customfield.NestedObject[MachinesStatusDataSourceModel] `tfsdk:"status" json:"status,computed"`
-	StorageGiB   types.Int64                                             `tfsdk:"storage_gib" json:"storage_gib,computed"`
-	VCPU         types.Float64                                           `tfsdk:"vcpu" json:"vcpu,computed"`
+	ID               types.String                                            `tfsdk:"id" json:"machine_id,computed"`
+	AutosleepSeconds types.Int64                                             `tfsdk:"autosleep_seconds" json:"autosleep_seconds,computed"`
+	CreatedAt        timetypes.RFC3339                                       `tfsdk:"created_at" json:"created_at,computed" format:"date-time"`
+	DesiredState     types.String                                            `tfsdk:"desired_state" json:"desired_state,computed"`
+	MachineID        types.String                                            `tfsdk:"machine_id" json:"machine_id,computed"`
+	MemoryMiB        types.Int64                                             `tfsdk:"memory_mib" json:"memory_mib,computed"`
+	Status           customfield.NestedObject[MachinesStatusDataSourceModel] `tfsdk:"status" json:"status,computed"`
+	StorageGiB       types.Int64                                             `tfsdk:"storage_gib" json:"storage_gib,computed"`
+	VCPU             types.Float64                                           `tfsdk:"vcpu" json:"vcpu,computed"`
 }
 
 type MachinesStatusDataSourceModel struct {
