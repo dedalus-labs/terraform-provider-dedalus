@@ -11,14 +11,16 @@ import (
 )
 
 type MachineModel struct {
-	ID           types.String                                 `tfsdk:"id" json:"-,computed"`
-	MachineID    types.String                                 `tfsdk:"machine_id" json:"machine_id,computed"`
-	MemoryMiB    types.Int64                                  `tfsdk:"memory_mib" json:"memory_mib,required"`
-	StorageGiB   types.Int64                                  `tfsdk:"storage_gib" json:"storage_gib,required"`
-	VCPU         types.Float64                                `tfsdk:"vcpu" json:"vcpu,required"`
-	DesiredState types.String                                 `tfsdk:"desired_state" json:"desired_state,computed"`
-	Status       customfield.NestedObject[MachineStatusModel] `tfsdk:"status" json:"status,computed"`
-	Timeouts     timeouts.Value                               `tfsdk:"timeouts"`
+	ID               types.String                                 `tfsdk:"id" json:"-,computed"`
+	MachineID        types.String                                 `tfsdk:"machine_id" json:"machine_id,computed"`
+	MemoryMiB        types.Int64                                  `tfsdk:"memory_mib" json:"memory_mib,required"`
+	StorageGiB       types.Int64                                  `tfsdk:"storage_gib" json:"storage_gib,required"`
+	VCPU             types.Float64                                `tfsdk:"vcpu" json:"vcpu,required"`
+	Autosleep        types.String                                 `tfsdk:"autosleep" json:"autosleep,optional,no_refresh"`
+	AutosleepSeconds types.Int64                                  `tfsdk:"autosleep_seconds" json:"autosleep_seconds,computed"`
+	DesiredState     types.String                                 `tfsdk:"desired_state" json:"desired_state,computed"`
+	Status           customfield.NestedObject[MachineStatusModel] `tfsdk:"status" json:"status,computed"`
+	Timeouts         timeouts.Value                               `tfsdk:"timeouts"`
 }
 
 func (m MachineModel) MarshalJSON() (data []byte, err error) {

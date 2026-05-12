@@ -8,6 +8,7 @@ import (
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/customfield"
 	"github.com/hashicorp/terraform-plugin-framework-timeouts/datasource/timeouts"
 	"github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -24,6 +25,13 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 			},
 			"machine_id": schema.StringAttribute{
 				Required: true,
+			},
+			"autosleep_seconds": schema.Int64Attribute{
+				Description: "Seconds of inactivity before autosleep. 0 disables autosleep.",
+				Computed:    true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 9223372036),
+				},
 			},
 			"desired_state": schema.StringAttribute{
 				Description: `Available values: "running", "sleeping", "destroyed".`,
