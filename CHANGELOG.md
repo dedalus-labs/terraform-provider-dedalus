@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.2.0 (2026-05-12)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **api:** add execution/preview/ssh_session/terminal resources, autosleep field to machine ([1a76aea](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/1a76aea921d4d4c6b762bc96392e1103d9a686be))
+
+
+### Bug Fixes
+
+* **timeouts:** drop invalid Read field from datasource timeout opts ([#7](https://github.com/dedalus-labs/terraform-provider-dedalus/issues/7)) ([581512e](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/581512e2fd5855a89a340c3bc373111f4b0a149c))
+
+
+### Chores
+
+* add local tmpfile directory ([f3799af](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/f3799afb773c443b13d1df132808825017bb959b))
+* **internal:** codegen related update ([db5f0d1](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/db5f0d140fcfe2824b7aa60d332ef7fe2eca3822))
+* **internal:** codegen related update ([74e669b](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/74e669b30ecfadc8fecbd5494f7c567535741d48))
+
 ## 0.1.0 (2026-04-22)
 
 Full Changelog: [v0.0.2...v0.1.0](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.0.2...v0.1.0)
