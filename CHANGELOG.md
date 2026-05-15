@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.1 (2026-05-15)
+
+Full Changelog: [v0.2.0...v0.2.1](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.2.0...v0.2.1)
+
+### Chores
+
+* **internal:** codegen related update ([06e285f](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/06e285f266ed544a170443c7742cc8bcb4f0a6f1))
+* update terraform-plugin-framework to v1.19.0 ([064de13](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/064de13b90be4920ff9cd8157504d0c19300abfb))
+
 ## 0.2.0 (2026-05-12)
 
 Full Changelog: [v0.1.0...v0.2.0](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.1.0...v0.2.0)
