@@ -10,9 +10,7 @@ import (
 	"github.com/dedalus-labs/dedalus-go/option"
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/machine"
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/machine_execution"
-	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/machine_preview"
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/machine_ssh_session"
-	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/machine_terminal"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
@@ -114,10 +112,8 @@ func (p *DedalusProvider) ConfigValidators(_ context.Context) []provider.ConfigV
 func (p *DedalusProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		machine.NewResource,
-		machine_preview.NewResource,
 		machine_ssh_session.NewResource,
 		machine_execution.NewResource,
-		machine_terminal.NewResource,
 	}
 }
 
@@ -125,14 +121,10 @@ func (p *DedalusProvider) DataSources(ctx context.Context) []func() datasource.D
 	return []func() datasource.DataSource{
 		machine.NewMachineDataSource,
 		machine.NewMachinesDataSource,
-		machine_preview.NewMachinePreviewDataSource,
-		machine_preview.NewMachinePreviewsDataSource,
 		machine_ssh_session.NewMachineSSHSessionDataSource,
 		machine_ssh_session.NewMachineSSHSessionsDataSource,
 		machine_execution.NewMachineExecutionDataSource,
 		machine_execution.NewMachineExecutionsDataSource,
-		machine_terminal.NewMachineTerminalDataSource,
-		machine_terminal.NewMachineTerminalsDataSource,
 	}
 }
 

@@ -39,10 +39,10 @@ provider "dedalus" {
 
 # Configure a resource
 resource "dedalus_machine" "example_machine" {
+  autosleep = "autosleep"
   memory_mib = 2048
   storage_gib = 10
   vcpu = 1
-  autosleep = "autosleep"
 }
 ```
 
