@@ -4,6 +4,11 @@
 
 Full Changelog: [v0.2.1...v0.3.0](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.2.1...v0.3.0)
 
+### Breaking changes
+
+* Align with the public Machines contract, removing preview and terminal resources and data sources. See the [upgrade guide](README.md#upgrading-to-030) before updating existing state.
+* Replace `dedalus_machines.items[*].status` with the public list response's `phase` field.
+
 ### Features
 
 * **stlc:** configurable CI runner and private-production-repo support in workflow templates ([00a3f6f](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/00a3f6f94270917d863745b755694bc35fb025fc))

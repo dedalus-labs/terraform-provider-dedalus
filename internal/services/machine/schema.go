@@ -12,7 +12,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/float64default"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 )
@@ -30,21 +33,29 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 				Computed:      true,
 				PlanModifiers: []planmodifier.String{stringplanmodifier.UseNonNullStateForUnknown()},
 			},
+			"autosleep": schema.StringAttribute{
+				Description: `Idle window before autosleep. Accepts fixed duration units like 30s, 30m, 2h, 7d3h4s, or 1w3d, raw seconds ("1800"), or never to disable.`,
+				Computed:    true,
+				Optional:    true,
+				Default:     stringdefault.StaticString("300s"),
+			},
 			"memory_mib": schema.Int64Attribute{
 				Description: "Memory in MiB.",
-				Required:    true,
+				Computed:    true,
+				Optional:    true,
+				Default:     int64default.StaticInt64(4096),
 			},
 			"storage_gib": schema.Int64Attribute{
 				Description: "Storage in GiB.",
-				Required:    true,
+				Computed:    true,
+				Optional:    true,
+				Default:     int64default.StaticInt64(10),
 			},
 			"vcpu": schema.Float64Attribute{
 				Description: "CPU in vCPUs.",
-				Required:    true,
-			},
-			"autosleep": schema.StringAttribute{
-				Description: `Idle window before autosleep. Accepts fixed duration units like 30s, 30m, 2h, 7d3h4s, or 1w3d, raw seconds ("1800"), or never to disable.`,
+				Computed:    true,
 				Optional:    true,
+				Default:     float64default.StaticFloat64(1),
 			},
 			"autosleep_seconds": schema.Int64Attribute{
 				Description: "Seconds of inactivity before autosleep. 0 disables autosleep.",
@@ -61,6 +72,23 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 						"running",
 						"sleeping",
 						"destroyed",
+					),
+				},
+			},
+			"phase": schema.StringAttribute{
+				Description: `Available values: "accepted", "placement_pending", "starting", "running", "stopping", "sleeping", "destroying", "destroyed", "failed".`,
+				Computed:    true,
+				Validators: []validator.String{
+					stringvalidator.OneOfCaseInsensitive(
+						"accepted",
+						"placement_pending",
+						"starting",
+						"running",
+						"stopping",
+						"sleeping",
+						"destroying",
+						"destroyed",
+						"failed",
 					),
 				},
 			},

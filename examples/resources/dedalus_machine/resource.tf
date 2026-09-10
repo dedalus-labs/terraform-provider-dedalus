@@ -1,6 +1,8 @@
+# @custom start
 resource "dedalus_machine" "example_machine" {
-  memory_mib = 0
-  storage_gib = 0
-  vcpu = 0
-  autosleep = "autosleep"
+  autosleep   = "300s"
+  memory_mib  = 4096
+  storage_gib = 10
+  vcpu        = 1
 }
+# @custom end
