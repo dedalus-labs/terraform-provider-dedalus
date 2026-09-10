@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.3.0 (2026-08-19)
+
+Full Changelog: [v0.2.1...v0.3.0](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.2.1...v0.3.0)
+
+### Breaking changes
+
+* Align with the public Machines contract, removing preview and terminal resources and data sources. See the [upgrade guide](README.md#upgrading-to-030) before updating existing state.
+* Replace `dedalus_machines.items[*].status` with the public list response's `phase` field.
+
+### Features
+
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([00a3f6f](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/00a3f6f94270917d863745b755694bc35fb025fc))
+
+
+### Bug Fixes
+
+* **scripts:** export GOPRIVATE and use `go mod tidy -e` in scripts/generate-docs ([c3f4ca8](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/c3f4ca83ded49a031003ccf69c673dda31310db3))
+* **terraform:** fix nil pointer dereference when comparing null or unknown numbers ([7d32b63](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/7d32b630c3975610df8642e404e8bc62bd9497bb))
+
+
+### Chores
+
+* **internal:** allow the mock server port to be set with STAINLESS_MOCK_PORT ([ecfbe4a](https://github.com/dedalus-labs/terraform-provider-dedalus/commit/ecfbe4a828ace46afe87a4fc9dd10f291e054d7d))
+
 ## 0.2.1 (2026-05-15)
 
 Full Changelog: [v0.2.0...v0.2.1](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.2.0...v0.2.1)

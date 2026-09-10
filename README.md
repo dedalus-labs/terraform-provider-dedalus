@@ -22,7 +22,7 @@ terraform {
   required_providers {
     dedalus = {
       source  = "dedalus-labs/dedalus"
-      version = "~> 0.2.1"
+      version = "~> 0.3.0"
     }
   }
 }
@@ -39,10 +39,10 @@ provider "dedalus" {
 
 # Configure a resource
 resource "dedalus_machine" "example_machine" {
+  autosleep = "300s"
   memory_mib = 2048
   storage_gib = 10
   vcpu = 1
-  autosleep = "autosleep"
 }
 ```
 
@@ -52,6 +52,18 @@ Initialize your project by running `terraform init` in the directory.
 
 Additional examples can be found in the [./examples](./examples) folder within this repository, and you can
 refer to the full documentation on [the Terraform Registry](https://registry.terraform.io/providers/dedalus-labs/dedalus/latest/docs).
+
+## Upgrading to 0.3.0
+
+The provider follows the public Machines contract: machines, SSH sessions, and
+executions. Preview and terminal resources and data sources are removed. Migrate
+or destroy any managed `dedalus_machine_preview` and `dedalus_machine_terminal`
+resources with the previous provider before upgrading. Remove their data-source
+references from configuration as well.
+
+Machine creation defaults to 1 vCPU, 4096 MiB of memory, 10 GiB of storage, and
+`300s` autosleep. The `dedalus_machines` data source exposes `items[*].phase`
+instead of `items[*].status.phase`.
 
 ### Provider Options
 
