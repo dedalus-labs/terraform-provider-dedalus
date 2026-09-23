@@ -65,47 +65,21 @@ func ListDataSourceSchema(ctx context.Context) schema.Schema {
 							Description: "Memory in MiB.",
 							Computed:    true,
 						},
-						"status": schema.SingleNestedAttribute{
-							Computed:   true,
-							CustomType: customfield.NewNestedObjectType[MachinesStatusDataSourceModel](ctx),
-							Attributes: map[string]schema.Attribute{
-								"last_progress_at": schema.StringAttribute{
-									Computed:   true,
-									CustomType: timetypes.RFC3339Type{},
-								},
-								"last_transition_at": schema.StringAttribute{
-									Computed:   true,
-									CustomType: timetypes.RFC3339Type{},
-								},
-								"phase": schema.StringAttribute{
-									Description: `Available values: "accepted", "placement_pending", "starting", "running", "stopping", "sleeping", "destroying", "destroyed", "failed".`,
-									Computed:    true,
-									Validators: []validator.String{
-										stringvalidator.OneOfCaseInsensitive(
-											"accepted",
-											"placement_pending",
-											"starting",
-											"running",
-											"stopping",
-											"sleeping",
-											"destroying",
-											"destroyed",
-											"failed",
-										),
-									},
-								},
-								"reason": schema.StringAttribute{
-									Computed: true,
-								},
-								"retryable": schema.BoolAttribute{
-									Computed: true,
-								},
-								"revision": schema.StringAttribute{
-									Computed: true,
-								},
-								"last_error": schema.StringAttribute{
-									Computed: true,
-								},
+						"phase": schema.StringAttribute{
+							Description: `Available values: "accepted", "placement_pending", "starting", "running", "stopping", "sleeping", "destroying", "destroyed", "failed".`,
+							Computed:    true,
+							Validators: []validator.String{
+								stringvalidator.OneOfCaseInsensitive(
+									"accepted",
+									"placement_pending",
+									"starting",
+									"running",
+									"stopping",
+									"sleeping",
+									"destroying",
+									"destroyed",
+									"failed",
+								),
 							},
 						},
 						"storage_gib": schema.Int64Attribute{

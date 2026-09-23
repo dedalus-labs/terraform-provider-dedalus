@@ -13,12 +13,13 @@ import (
 type MachineModel struct {
 	ID               types.String                                 `tfsdk:"id" json:"-,computed"`
 	MachineID        types.String                                 `tfsdk:"machine_id" json:"machine_id,computed"`
-	MemoryMiB        types.Int64                                  `tfsdk:"memory_mib" json:"memory_mib,required"`
-	StorageGiB       types.Int64                                  `tfsdk:"storage_gib" json:"storage_gib,required"`
-	VCPU             types.Float64                                `tfsdk:"vcpu" json:"vcpu,required"`
-	Autosleep        types.String                                 `tfsdk:"autosleep" json:"autosleep,optional,no_refresh"`
+	Autosleep        types.String                                 `tfsdk:"autosleep" json:"autosleep,computed_optional,no_refresh"`
+	MemoryMiB        types.Int64                                  `tfsdk:"memory_mib" json:"memory_mib,computed_optional"`
+	StorageGiB       types.Int64                                  `tfsdk:"storage_gib" json:"storage_gib,computed_optional"`
+	VCPU             types.Float64                                `tfsdk:"vcpu" json:"vcpu,computed_optional"`
 	AutosleepSeconds types.Int64                                  `tfsdk:"autosleep_seconds" json:"autosleep_seconds,computed"`
 	DesiredState     types.String                                 `tfsdk:"desired_state" json:"desired_state,computed"`
+	Phase            types.String                                 `tfsdk:"phase" json:"phase,computed,no_refresh"`
 	Status           customfield.NestedObject[MachineStatusModel] `tfsdk:"status" json:"status,computed"`
 	Timeouts         timeouts.Value                               `tfsdk:"timeouts"`
 }
