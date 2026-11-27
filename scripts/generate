@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+if [[ $# != 1 ]]; then
+  echo "usage: $0 /path/to/sdkgen/dist/index.cjs" >&2
+  exit 2
+fi
+
+mkdir -p .tmp
+output=$(mktemp -d "$PWD/.tmp/generated.XXXXXX")
+version=$(node -p 'require("./.release-please-manifest.json")["."]')
+node "$1" generate --spec generation/openapi.json --config generation/config.yml \
+  --output "$output" --targets terraform --sdk-version "$version" --lint --test --strict
+
+git apply --directory="${output#"$PWD/"}/terraform" generation/custom.patch
+node --input-type=module - "$output/terraform" <<'JS'
+import { chmodSync, globSync, readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+const root = process.argv[2];
+for (const file of globSync('examples/**/*.sh', { cwd: root })) {
+  chmodSync(join(root, file), 0o755);
+}
+for (const file of globSync('docs/**/*.md', { cwd: root })) {
+  const path = join(root, file);
+  writeFileSync(path, readFileSync(path, 'utf8').replace(/[\t ]+$/gm, ''));
+}
+JS
+
+(cd "$output/terraform" && ./scripts/test)
+echo "Generated provider: $output/terraform"

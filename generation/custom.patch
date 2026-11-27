@@ -1,0 +1,61 @@
+--- a/internal/services/machine/resource.go
++++ b/internal/services/machine/resource.go
+@@ -300,6 +300,20 @@
+ 	}
+ 	data.ID = data.MachineID
+ 
++	// @custom start
++	// GET returns seconds rather than the request's duration spelling. Import
++	// has no prior configuration to preserve, so record the remote value.
++	if data.AutosleepSeconds.IsNull() || data.AutosleepSeconds.IsUnknown() || data.AutosleepSeconds.ValueInt64() < 0 {
++		resp.Diagnostics.AddError("invalid autosleep state", "The API must return a non-negative autosleep_seconds value for import.")
++		return
++	}
++	if data.AutosleepSeconds.ValueInt64() == 0 {
++		data.Autosleep = types.StringValue("never")
++	} else {
++		data.Autosleep = types.StringValue(fmt.Sprintf("%ds", data.AutosleepSeconds.ValueInt64()))
++	}
++	// @custom end
++
+ 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+ }
+ 
+--- a/internal/services/machine_port/model.go
++++ b/internal/services/machine_port/model.go
+@@ -35,5 +35,12 @@
+ }
+ 
+ func (m MachinePortModel) MarshalJSONForUpdate(state MachinePortModel) (data []byte, err error) {
+-	return apijson.MarshalForPatch(m, state)
++	// @custom start
++	// Port updates require visibility and omit an unset password. This endpoint
++	// accepts application/json, not JSON Merge Patch deletion semantics.
++	return apijson.MarshalRoot(struct {
++		Visibility types.String `json:"visibility,required"`
++		Password   types.String `json:"password,optional"`
++	}{Visibility: m.Visibility, Password: m.Password})
++	// @custom end
+ }
+--- a/examples/resources/dedalus_machine_port/resource.tf
++++ b/examples/resources/dedalus_machine_port/resource.tf
+@@ -1,8 +1,6 @@
+ resource "dedalus_machine_port" "example_machine_port" {
+   machine_id = "017f22e2-79b0-7cc3-98c4-dc0c0c07398f"
+   port = 8080
+-  expires = 1
+-  password = "password"
+   protocol = "http"
+   visibility = "private"
+ }
+--- a/docs/resources/machine_port.md
++++ b/docs/resources/machine_port.md
+@@ -16,8 +16,6 @@
+ resource "dedalus_machine_port" "example_machine_port" {
+   machine_id = "017f22e2-79b0-7cc3-98c4-dc0c0c07398f"
+   port = 8080
+-  expires = 1
+-  password = "password"
+   protocol = "http"
+   visibility = "private"
+ }

@@ -40,14 +40,19 @@ To execute the schema and unit tests, run:
 $ ./scripts/test
 ```
 
-Note that this does not run [acceptance tests](https://developer.hashicorp.com/terraform/plugin/framework/acctests) by default, because
-those tests interact with real resources in the cloud and could incur fees.
-
-To enable the running of acceptance tests, use the `TF_ACC` environment variable:
+The acceptance tests run the real Terraform CLI against a local HTTP contract
+server. They create no cloud resources and use no saved credentials:
 
 ```sh
-$ TF_ACC=1 ./scripts/test
+TF_ACC=1 ./scripts/test
 ```
+
+The version-upgrade test additionally takes the path to a previously built
+provider binary in `TF_ACC_PREVIOUS_PROVIDER`.
+
+A separate live smoke test is available through `./scripts/test-live`; it requires
+an explicit staging endpoint and API credential and creates disposable resources.
+See the script's usage and cleanup behavior before running it.
 
 ## Formatting
 
