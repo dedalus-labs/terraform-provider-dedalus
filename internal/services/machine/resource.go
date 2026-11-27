@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Dedalus. See CONTRIBUTING.md for details.
 
 package machine
 
@@ -14,6 +14,7 @@ import (
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/apijson"
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/importpath"
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/logging"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -248,6 +249,11 @@ func (r *MachineResource) Delete(ctx context.Context, req resource.DeleteRequest
 
 func (r *MachineResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	var data = new(MachineModel)
+	// Import has no plan; decode the schema's null value to retain the timeout type.
+	resp.Diagnostics.Append(resp.State.GetAttribute(ctx, path.Root("timeouts"), &data.Timeouts)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	path := ""
 	diags := importpath.ParseImportID(
@@ -293,6 +299,20 @@ func (r *MachineResource) ImportState(ctx context.Context, req resource.ImportSt
 		return
 	}
 	data.ID = data.MachineID
+
+	// @custom start
+	// GET returns seconds rather than the request's duration spelling. Import
+	// has no prior configuration to preserve, so record the remote value.
+	if data.AutosleepSeconds.IsNull() || data.AutosleepSeconds.IsUnknown() || data.AutosleepSeconds.ValueInt64() < 0 {
+		resp.Diagnostics.AddError("invalid autosleep state", "The API must return a non-negative autosleep_seconds value for import.")
+		return
+	}
+	if data.AutosleepSeconds.ValueInt64() == 0 {
+		data.Autosleep = types.StringValue("never")
+	} else {
+		data.Autosleep = types.StringValue(fmt.Sprintf("%ds", data.AutosleepSeconds.ValueInt64()))
+	}
+	// @custom end
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

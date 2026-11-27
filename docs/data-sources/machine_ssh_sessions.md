@@ -14,7 +14,7 @@ description: |-
 
 ```terraform
 data "dedalus_machine_ssh_sessions" "example_machine_ssh_sessions" {
-  machine_id = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c"
+  machine_id = "017f22e2-79b0-7cc3-98c4-dc0c0c07398f"
 }
 ```
 
@@ -23,7 +23,7 @@ data "dedalus_machine_ssh_sessions" "example_machine_ssh_sessions" {
 
 ### Required
 
-- `machine_id` (String)
+- `machine_id` (String) Bare, lowercase, hyphenated Machine UUID. Pass the returned machine_id unchanged.
 
 ### Optional
 
@@ -57,7 +57,7 @@ Read-Only:
 - `ready_at` (String)
 - `retry_after_ms` (Number)
 - `session_id` (String)
-- `status` (String) Available values: "wake_in_progress", "ready", "closed", "expired", "failed".
+- `status` (String) Available values: "wake_in_progress", "ssh_in_progress", "ready", "closed", "expired", "failed".
 
 <a id="nestedatt--items--machine_ssh_session_connection"></a>
 ### Nested Schema for `items.machine_ssh_session_connection`

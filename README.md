@@ -3,7 +3,7 @@
 The [Dedalus Terraform provider](https://registry.terraform.io/providers/dedalus-labs/dedalus/latest/docs) provides convenient access to
 the [Dedalus REST API](https://docs.dedaluslabs.ai) from Terraform.
 
-It is generated with [Stainless](https://www.stainless.com/).
+It is generated with Dedalus SDK Generator from the pinned API definition in [generation](generation/README.md).
 
 ## Requirements
 
@@ -22,7 +22,7 @@ terraform {
   required_providers {
     dedalus = {
       source  = "dedalus-labs/dedalus"
-      version = "~> 0.3.0"
+      version = "~> 0.4.0"
     }
   }
 }
@@ -52,6 +52,31 @@ Initialize your project by running `terraform init` in the directory.
 
 Additional examples can be found in the [./examples](./examples) folder within this repository, and you can
 refer to the full documentation on [the Terraform Registry](https://registry.terraform.io/providers/dedalus-labs/dedalus/latest/docs).
+
+## Upgrading to 0.4.0
+
+Machine ports are now available as a resource and as singular/list data sources.
+Port visibility changes update the existing binding. API credentials and port
+sharing passwords are marked sensitive in Terraform output; Terraform state still
+contains those values and must be protected.
+
+CPU and memory are creation-only properties in this provider: changing an
+explicitly configured `vcpu` or `memory_mib` now plans machine replacement.
+Review that plan before applying because replacement deletes the old machine and
+its storage. External resizing can produce the same replacement plan when the
+configured shape differs from the API. If autoresizing owns these values, use
+`lifecycle.ignore_changes` for `vcpu` and `memory_mib`. For an in-place manual
+resize, use the Machines resize API.
+
+Import reads `autosleep_seconds` from the API and records `never` for zero or
+`<seconds>s` otherwise. Use that canonical spelling for a no-change plan after
+import (`60s`, for example, rather than `1m`). Normal refresh preserves an
+existing configured spelling.
+
+Key-required ports use an owner-chosen `password` of exactly eight ASCII letters
+or digits. The API never returns it, so normal refresh preserves the configured
+value and import leaves it null. Reapply the password after importing a protected
+port. Password updates include visibility in the same request.
 
 ## Upgrading to 0.3.0
 

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Dedalus. See CONTRIBUTING.md for details.
 
 package machine_execution
 
@@ -34,10 +34,12 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 				PlanModifiers: []planmodifier.String{stringplanmodifier.UseNonNullStateForUnknown(), stringplanmodifier.RequiresReplace()},
 			},
 			"machine_id": schema.StringAttribute{
+				Description:   "Bare, lowercase, hyphenated Machine UUID. Pass the returned machine_id unchanged.",
 				Required:      true,
 				PlanModifiers: []planmodifier.String{stringplanmodifier.RequiresReplace()},
 			},
 			"command": schema.ListAttribute{
+				Description:   `Program and its arguments as an array of strings, such as ["ls", "-la"]. A single string is not split into arguments. To run a shell command line, pass ["sh", "-c", "<command line>"].`,
 				Required:      true,
 				ElementType:   types.StringType,
 				PlanModifiers: []planmodifier.List{listplanmodifier.RequiresReplace()},
@@ -66,6 +68,12 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 			"created_at": schema.StringAttribute{
 				Computed:   true,
 				CustomType: timetypes.RFC3339Type{},
+			},
+			"creation_request_id": schema.StringAttribute{
+				Computed: true,
+			},
+			"creation_trace_id": schema.StringAttribute{
+				Computed: true,
 			},
 			"error_code": schema.StringAttribute{
 				Computed: true,
@@ -133,6 +141,32 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 						"name": schema.StringAttribute{
 							Computed: true,
 						},
+					},
+				},
+			},
+			"log_capture": schema.SingleNestedAttribute{
+				Computed:   true,
+				CustomType: customfield.NewNestedObjectType[MachineExecutionLogCaptureModel](ctx),
+				Attributes: map[string]schema.Attribute{
+					"code": schema.StringAttribute{
+						Computed: true,
+					},
+					"lost_bytes": schema.StringAttribute{
+						Computed: true,
+					},
+					"state": schema.StringAttribute{
+						Description: `Available values: "pending", "incomplete", "unavailable".`,
+						Computed:    true,
+						Validators: []validator.String{
+							stringvalidator.OneOfCaseInsensitive(
+								"pending",
+								"incomplete",
+								"unavailable",
+							),
+						},
+					},
+					"unconfirmed_bytes": schema.StringAttribute{
+						Computed: true,
 					},
 				},
 			},

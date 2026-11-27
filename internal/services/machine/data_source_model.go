@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Dedalus. See CONTRIBUTING.md for details.
 
 package machine
 
@@ -34,11 +34,27 @@ func (m *MachineDataSourceModel) toReadParams(_ context.Context) (params dedalus
 }
 
 type MachineStatusDataSourceModel struct {
-	LastProgressAt   timetypes.RFC3339 `tfsdk:"last_progress_at" json:"last_progress_at,computed" format:"date-time"`
-	LastTransitionAt timetypes.RFC3339 `tfsdk:"last_transition_at" json:"last_transition_at,computed" format:"date-time"`
-	Phase            types.String      `tfsdk:"phase" json:"phase,computed"`
-	Reason           types.String      `tfsdk:"reason" json:"reason,computed"`
-	Retryable        types.Bool        `tfsdk:"retryable" json:"retryable,computed"`
-	Revision         types.String      `tfsdk:"revision" json:"revision,computed"`
-	LastError        types.String      `tfsdk:"last_error" json:"last_error,computed"`
+	Autoresize       customfield.NestedObject[MachineStatusAutoresizeDataSourceModel] `tfsdk:"autoresize" json:"autoresize,computed"`
+	LastProgressAt   timetypes.RFC3339                                                `tfsdk:"last_progress_at" json:"last_progress_at,computed" format:"date-time"`
+	LastTransitionAt timetypes.RFC3339                                                `tfsdk:"last_transition_at" json:"last_transition_at,computed" format:"date-time"`
+	Phase            types.String                                                     `tfsdk:"phase" json:"phase,computed"`
+	Reason           types.String                                                     `tfsdk:"reason" json:"reason,computed"`
+	Retryable        types.Bool                                                       `tfsdk:"retryable" json:"retryable,computed"`
+	Revision         types.String                                                     `tfsdk:"revision" json:"revision,computed"`
+	LastError        types.String                                                     `tfsdk:"last_error" json:"last_error,computed"`
+}
+
+type MachineStatusAutoresizeDataSourceModel struct {
+	CPU    customfield.NestedObject[MachineStatusAutoresizeCPUDataSourceModel]    `tfsdk:"cpu" json:"cpu,computed"`
+	Memory customfield.NestedObject[MachineStatusAutoresizeMemoryDataSourceModel] `tfsdk:"memory" json:"memory,computed"`
+}
+
+type MachineStatusAutoresizeCPUDataSourceModel struct {
+	BlockedAt     timetypes.RFC3339 `tfsdk:"blocked_at" json:"blocked_at,computed" format:"date-time"`
+	BlockedReason types.String      `tfsdk:"blocked_reason" json:"blocked_reason,computed"`
+}
+
+type MachineStatusAutoresizeMemoryDataSourceModel struct {
+	BlockedAt     timetypes.RFC3339 `tfsdk:"blocked_at" json:"blocked_at,computed" format:"date-time"`
+	BlockedReason types.String      `tfsdk:"blocked_reason" json:"blocked_reason,computed"`
 }

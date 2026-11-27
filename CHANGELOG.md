@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0 (2026-11-27)
+
+* Add machine ports with visibility and owner-chosen password updates.
+* Generate from the current Machines API using Go SDK v0.8.0 as transport.
+* Fix typed import timeouts and preserve remote autosleep values.
+* Mark credentials sensitive and omit HTTP payloads from debug logs.
+* Verify lifecycle, import and upgrade behavior with Terraform CLI tests.
+* CPU and memory drift now plans replacement; see the [upgrade guide](README.md#upgrading-to-040).
+* Imported autosleep uses canonical seconds or `never`.
+
 ## 0.3.0 (2026-08-19)
 
 Full Changelog: [v0.2.1...v0.3.0](https://github.com/dedalus-labs/terraform-provider-dedalus/compare/v0.2.1...v0.3.0)

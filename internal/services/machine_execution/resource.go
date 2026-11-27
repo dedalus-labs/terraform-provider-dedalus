@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Dedalus. See CONTRIBUTING.md for details.
 
 package machine_execution
 
@@ -14,6 +14,7 @@ import (
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/apijson"
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/importpath"
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/logging"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -198,6 +199,11 @@ func (r *MachineExecutionResource) Delete(ctx context.Context, req resource.Dele
 
 func (r *MachineExecutionResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	var data = new(MachineExecutionModel)
+	// Import has no plan; decode the schema's null value to retain the timeout type.
+	resp.Diagnostics.Append(resp.State.GetAttribute(ctx, path.Root("timeouts"), &data.Timeouts)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	path_machine_id := ""
 	path_execution_id := ""

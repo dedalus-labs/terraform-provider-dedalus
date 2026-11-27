@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Dedalus. See CONTRIBUTING.md for details.
 
 package machine_execution
 
@@ -27,7 +27,8 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 				Required: true,
 			},
 			"machine_id": schema.StringAttribute{
-				Required: true,
+				Description: "Bare, lowercase, hyphenated Machine UUID. Pass the returned machine_id unchanged.",
+				Required:    true,
 			},
 			"completed_at": schema.StringAttribute{
 				Computed:   true,
@@ -36,6 +37,12 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 			"created_at": schema.StringAttribute{
 				Computed:   true,
 				CustomType: timetypes.RFC3339Type{},
+			},
+			"creation_request_id": schema.StringAttribute{
+				Computed: true,
+			},
+			"creation_trace_id": schema.StringAttribute{
+				Computed: true,
 			},
 			"cwd": schema.StringAttribute{
 				Computed: true,
@@ -111,6 +118,32 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 						"name": schema.StringAttribute{
 							Computed: true,
 						},
+					},
+				},
+			},
+			"log_capture": schema.SingleNestedAttribute{
+				Computed:   true,
+				CustomType: customfield.NewNestedObjectType[MachineExecutionLogCaptureDataSourceModel](ctx),
+				Attributes: map[string]schema.Attribute{
+					"code": schema.StringAttribute{
+						Computed: true,
+					},
+					"lost_bytes": schema.StringAttribute{
+						Computed: true,
+					},
+					"state": schema.StringAttribute{
+						Description: `Available values: "pending", "incomplete", "unavailable".`,
+						Computed:    true,
+						Validators: []validator.String{
+							stringvalidator.OneOfCaseInsensitive(
+								"pending",
+								"incomplete",
+								"unavailable",
+							),
+						},
+					},
+					"unconfirmed_bytes": schema.StringAttribute{
+						Computed: true,
 					},
 				},
 			},

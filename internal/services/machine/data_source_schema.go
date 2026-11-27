@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Dedalus. See CONTRIBUTING.md for details.
 
 package machine
 
@@ -21,10 +21,12 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 	return schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed: true,
+				Description: "Bare, lowercase, hyphenated Machine UUID. Pass the returned machine_id unchanged.",
+				Computed:    true,
 			},
 			"machine_id": schema.StringAttribute{
-				Required: true,
+				Description: "Bare, lowercase, hyphenated Machine UUID. Pass the returned machine_id unchanged.",
+				Required:    true,
 			},
 			"autosleep_seconds": schema.Int64Attribute{
 				Description: "Seconds of inactivity before autosleep. 0 disables autosleep.",
@@ -59,6 +61,66 @@ func DataSourceSchema(ctx context.Context) schema.Schema {
 				Computed:   true,
 				CustomType: customfield.NewNestedObjectType[MachineStatusDataSourceModel](ctx),
 				Attributes: map[string]schema.Attribute{
+					"autoresize": schema.SingleNestedAttribute{
+						Computed:   true,
+						CustomType: customfield.NewNestedObjectType[MachineStatusAutoresizeDataSourceModel](ctx),
+						Attributes: map[string]schema.Attribute{
+							"cpu": schema.SingleNestedAttribute{
+								Computed:   true,
+								CustomType: customfield.NewNestedObjectType[MachineStatusAutoresizeCPUDataSourceModel](ctx),
+								Attributes: map[string]schema.Attribute{
+									"blocked_at": schema.StringAttribute{
+										Description: "Time the current refusal was first recorded.",
+										Computed:    true,
+										CustomType:  timetypes.RFC3339Type{},
+									},
+									"blocked_reason": schema.StringAttribute{
+										Description: "Why the latest automatic increase could not proceed, as the error code an explicit resize would return. Absent once an automatic increase is accepted.\nAvailable values: \"MACHINE_GROWTH_LIMIT_REACHED\", \"MACHINE_TIER_SHAPE_EXCEEDED\", \"MACHINE_QUOTA_EXCEEDED\", \"MACHINE_MEMORY_ABOVE_LIMIT\", \"ASSIGNED_HOST_CAPACITY_CONFLICT\", \"MACHINE_PLACEMENT_EXHAUSTED\", \"MACHINE_RESIZE_UNAVAILABLE\", \"MACHINE_SHAPE_UNSUPPORTED\".",
+										Computed:    true,
+										Validators: []validator.String{
+											stringvalidator.OneOfCaseInsensitive(
+												"MACHINE_GROWTH_LIMIT_REACHED",
+												"MACHINE_TIER_SHAPE_EXCEEDED",
+												"MACHINE_QUOTA_EXCEEDED",
+												"MACHINE_MEMORY_ABOVE_LIMIT",
+												"ASSIGNED_HOST_CAPACITY_CONFLICT",
+												"MACHINE_PLACEMENT_EXHAUSTED",
+												"MACHINE_RESIZE_UNAVAILABLE",
+												"MACHINE_SHAPE_UNSUPPORTED",
+											),
+										},
+									},
+								},
+							},
+							"memory": schema.SingleNestedAttribute{
+								Computed:   true,
+								CustomType: customfield.NewNestedObjectType[MachineStatusAutoresizeMemoryDataSourceModel](ctx),
+								Attributes: map[string]schema.Attribute{
+									"blocked_at": schema.StringAttribute{
+										Description: "Time the current refusal was first recorded.",
+										Computed:    true,
+										CustomType:  timetypes.RFC3339Type{},
+									},
+									"blocked_reason": schema.StringAttribute{
+										Description: "Why the latest automatic increase could not proceed, as the error code an explicit resize would return. Absent once an automatic increase is accepted.\nAvailable values: \"MACHINE_GROWTH_LIMIT_REACHED\", \"MACHINE_TIER_SHAPE_EXCEEDED\", \"MACHINE_QUOTA_EXCEEDED\", \"MACHINE_MEMORY_ABOVE_LIMIT\", \"ASSIGNED_HOST_CAPACITY_CONFLICT\", \"MACHINE_PLACEMENT_EXHAUSTED\", \"MACHINE_RESIZE_UNAVAILABLE\", \"MACHINE_SHAPE_UNSUPPORTED\".",
+										Computed:    true,
+										Validators: []validator.String{
+											stringvalidator.OneOfCaseInsensitive(
+												"MACHINE_GROWTH_LIMIT_REACHED",
+												"MACHINE_TIER_SHAPE_EXCEEDED",
+												"MACHINE_QUOTA_EXCEEDED",
+												"MACHINE_MEMORY_ABOVE_LIMIT",
+												"ASSIGNED_HOST_CAPACITY_CONFLICT",
+												"MACHINE_PLACEMENT_EXHAUSTED",
+												"MACHINE_RESIZE_UNAVAILABLE",
+												"MACHINE_SHAPE_UNSUPPORTED",
+											),
+										},
+									},
+								},
+							},
+						},
+					},
 					"last_progress_at": schema.StringAttribute{
 						Computed:   true,
 						CustomType: timetypes.RFC3339Type{},
