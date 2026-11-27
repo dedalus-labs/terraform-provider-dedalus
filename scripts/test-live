@@ -1,0 +1,198 @@
+#!/usr/bin/env bash
+
+set +x
+set -euo pipefail
+umask 077
+
+if [[ "${DEDALUS_BASE_URL:-}" != "https://staging.dcs.dedaluslabs.ai" ]]; then
+  echo 'test-live requires DEDALUS_BASE_URL=https://staging.dcs.dedaluslabs.ai' >&2
+  exit 1
+fi
+: "${DEDALUS_API_KEY:?test-live requires DEDALUS_API_KEY}"
+unset DEDALUS_X_API_KEY
+while IFS= read -r name; do
+  case "$name" in
+    TF_*) unset "$name" ;;
+  esac
+done < <(compgen -e)
+
+root=$(cd "$(dirname "$0")/.." && pwd)
+for tool in terraform python3 go curl; do
+  command -v "$tool" >/dev/null
+done
+run_dir=$(mktemp -d "${TMPDIR:-/tmp}/dedalus-provider-live.XXXXXX")
+chmod 700 "$run_dir"
+export TF_CLI_CONFIG_FILE="$run_dir/terraform.rc"
+export TF_IN_AUTOMATION=1
+export CHECKPOINT_DISABLE=1
+(cd "$root" && ./scripts/build) >"$run_dir/build.log" 2>&1
+cat >"$TF_CLI_CONFIG_FILE" <<EOF
+provider_installation {
+  dev_overrides {
+    "dedalus-labs/dedalus" = "$root"
+  }
+}
+EOF
+
+verify_deleted() {
+python3 - "$run_dir" <<'PY'
+import json
+import os
+from pathlib import Path
+import sys
+import time
+import subprocess
+from urllib.parse import quote
+
+root = Path(sys.argv[1])
+outputs = json.loads((root / "outputs.json").read_text())
+machine = outputs.get("machine_id", {}).get("value")
+port = outputs.get("port_id", {}).get("value")
+if machine is None:
+    raise SystemExit(0)
+machine = quote(machine, safe="")
+base = os.environ["DEDALUS_BASE_URL"]
+headers = "Authorization: Bearer " + os.environ["DEDALUS_API_KEY"] + "\n"
+targets = [("machine", f"/v1/machines/{machine}", "destroyed")]
+if port is not None:
+    targets.insert(0, ("port", f"/v1/machines/{machine}/ports/{quote(port, safe='')}", "closed"))
+for name, path, terminal in targets:
+    deadline = time.monotonic() + 120
+    while True:
+        evidence = root / f"verify-{name}.json"
+        response = subprocess.run(
+            ["curl", "--silent", "--show-error", "--max-time", "15", "--header", "@-",
+             "--output", str(evidence), "--write-out", "%{http_code}", base + path],
+            input=headers, text=True, capture_output=True, check=True,
+        )
+        if response.stdout == "404":
+            break
+        if response.stdout != "200":
+            raise SystemExit(f"FAIL  {name} deletion verification (HTTP {response.stdout})")
+        body = json.loads(evidence.read_text())
+        status = body.get("status")
+        phase = status.get("phase") if isinstance(status, dict) else status
+        if phase == terminal:
+            break
+        if time.monotonic() >= deadline:
+            raise SystemExit(f"FAIL  {name} deletion verification timed out")
+        time.sleep(1)
+    print(f"  ok  {name} deletion verified")
+PY
+}
+
+destroyed=0
+cleanup() {
+  result=$?
+  trap - EXIT INT TERM
+  if [[ "$destroyed" == 0 ]]; then
+    if ! terraform -chdir="$run_dir" output -json >"$run_dir/outputs.json" 2>"$run_dir/outputs-error.log"; then
+      echo "FAIL  capture cleanup IDs (inspect $run_dir/outputs-error.log)" >&2
+      result=1
+    fi
+    if terraform -chdir="$run_dir" destroy -auto-approve -input=false -no-color >"$run_dir/cleanup.log" 2>&1; then
+      echo '  ok  cleanup'
+      if ! verify_deleted; then
+        result=1
+      fi
+    else
+      echo "FAIL  cleanup (inspect $run_dir/cleanup.log)" >&2
+      result=1
+    fi
+  fi
+  echo "evidence: $run_dir"
+  exit "$result"
+}
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+run() {
+  label=$1
+  shift
+  if terraform -chdir="$run_dir" "$@" -no-color >"$run_dir/$label.log" 2>&1; then
+    printf '  ok  %s\n' "$label"
+  else
+    printf 'FAIL  %s (inspect %s/%s.log)\n' "$label" "$run_dir" "$label" >&2
+    exit 1
+  fi
+}
+
+configure() {
+  autosleep=$1
+  visibility=$2
+  cat >"$run_dir/main.tf" <<EOF
+terraform {
+  required_providers {
+    dedalus = { source = "dedalus-labs/dedalus" }
+  }
+}
+provider "dedalus" {}
+resource "dedalus_machine" "test" {
+  vcpu = 1
+  memory_mib = 512
+  storage_gib = 10
+  autosleep = "$autosleep"
+}
+output "machine_id" { value = dedalus_machine.test.machine_id }
+EOF
+  if [[ -n "$visibility" ]]; then
+    cat >>"$run_dir/main.tf" <<EOF
+resource "dedalus_machine_port" "test" {
+  machine_id = dedalus_machine.test.machine_id
+  port = 8080
+  visibility = "$visibility"
+}
+output "port_id" { value = dedalus_machine_port.test.port_id }
+EOF
+    if [[ "$visibility" == key_required ]]; then
+      python3 - "$run_dir/main.tf" <<'PY_CONFIG'
+from pathlib import Path
+import sys
+p = Path(sys.argv[1])
+s = p.read_text().replace('  visibility = "key_required"', '  visibility = "key_required"\n  password = var.port_password')
+s += '\nvariable "port_password" {\n  type = string\n  sensitive = true\n}\n'
+p.write_text(s)
+PY_CONFIG
+    fi
+  fi
+}
+
+configure 30s ''
+run machine-create apply -auto-approve -input=false
+run machine-read apply -refresh-only -auto-approve -input=false
+run machine-plan plan -detailed-exitcode -input=false
+configure 60s ''
+run machine-update apply -auto-approve -input=false
+run machine-updated-plan plan -detailed-exitcode -input=false
+terraform -chdir="$run_dir" output -json >"$run_dir/outputs.json"
+machine_id=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["machine_id"]["value"])' "$run_dir/outputs.json")
+
+# Import into separate local state so a failed import cannot orphan the
+# resource from the original state used by the cleanup trap.
+run machine-import import -input=false -state="$run_dir/import.tfstate" dedalus_machine.test "$machine_id"
+run machine-import-plan plan -state="$run_dir/import.tfstate" -detailed-exitcode -input=false
+
+# The port is never public. The password is passed only through the
+# environment and retained only in the private Terraform state/evidence.
+TF_VAR_port_password=$(python3 -c 'import secrets,string; print("".join(secrets.choice(string.ascii_letters + string.digits) for _ in range(8)))')
+export TF_VAR_port_password
+configure 60s key_required
+run port-create apply -auto-approve -input=false
+run port-read apply -refresh-only -auto-approve -input=false
+run port-plan plan -detailed-exitcode -input=false
+TF_VAR_port_password=$(python3 -c 'import secrets,string; print("".join(secrets.choice(string.ascii_letters + string.digits) for _ in range(8)))')
+run port-password-rotate apply -auto-approve -input=false
+run port-rotated-plan plan -detailed-exitcode -input=false
+unset TF_VAR_port_password
+configure 60s private
+run port-update apply -auto-approve -input=false
+run port-updated-plan plan -detailed-exitcode -input=false
+terraform -chdir="$run_dir" output -json >"$run_dir/outputs.json"
+port_id=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["port_id"]["value"])' "$run_dir/outputs.json")
+run port-import import -input=false -state="$run_dir/import.tfstate" dedalus_machine_port.test "$machine_id/$port_id"
+run port-import-plan plan -state="$run_dir/import.tfstate" -detailed-exitcode -input=false
+run destroy destroy -auto-approve -input=false
+destroyed=1
+
+verify_deleted
