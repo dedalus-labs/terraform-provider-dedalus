@@ -1,0 +1,412 @@
+edition: '2026-02-23'
+organization:
+  name: Dedalus
+  docs: https://docs.dedaluslabs.ai
+  contact: oss@dedaluslabs.ai
+  security_contact: security@dedaluslabs.ai
+  github_org: dedalus-labs
+  upload_spec: false
+settings:
+  license: MIT
+  per_endpoint_security: true
+  positional_params: false
+environments:
+  production: https://dcs.dedaluslabs.ai
+security:
+- BearerAuth: []
+- ApiKeyAuth: []
+client_settings:
+  idempotency:
+    header: Idempotency-Key
+  default_timeout: 60000
+  default_retries:
+    max_retries: 2
+    initial_delay_seconds: 0.5
+    max_delay_seconds: 8
+  opts:
+    api_key:
+      type: string
+      nullable: true
+      auth:
+        security_scheme: BearerAuth
+      read_env: DEDALUS_API_KEY
+      description: Dedalus API key sent as Authorization Bearer.
+    x_api_key:
+      type: string
+      nullable: true
+      auth:
+        security_scheme: ApiKeyAuth
+      read_env: DEDALUS_X_API_KEY
+      description: Dedalus API key sent as x-api-key header.
+    dedalus_org_id:
+      type: string
+      nullable: true
+      read_env: DEDALUS_ORG_ID
+      send_in_header: X-Dedalus-Org-Id
+      description: Optional organization assertion. If set, must match the API key's
+        organization.
+query_settings:
+  nested_format: brackets
+  array_format: repeat
+errors:
+  message_property: message
+custom_casings:
+  api:
+    initialism: true
+  cli:
+    initialism: true
+  cpu:
+    initialism: true
+  vcpu:
+    initialism: true
+  http:
+    initialism: true
+  id:
+    initialism: true
+  mcp:
+    initialism: true
+  sdk:
+    initialism: true
+  ssh:
+    initialism: true
+  url:
+    initialism: true
+  uuid:
+    initialism: true
+  mib:
+    snake: mib
+    pascal: MiB
+    capital: MiB
+    camel: MiB
+  gib:
+    snake: gib
+    pascal: GiB
+    capital: GiB
+    camel: GiB
+pagination:
+- name: cursor_page
+  type: cursor
+  request:
+    cursor:
+      type: string
+    limit:
+      type: integer
+  response:
+    items:
+      type: array
+      items: {}
+    next_cursor:
+      type: string
+      nullable: true
+streaming:
+  on_event:
+  - event_type: bookmark
+    handle: continue
+  - event_type: error
+    handle: error
+  - event_type: status
+    handle: yield
+resources:
+  organization:
+    methods:
+      autoresize:
+        endpoint: patch /v1/organization/autoresizing
+      retrieve_autoresizing:
+        endpoint: get /v1/organization/autoresizing
+  machines:
+    mcp: true
+    terraform:
+      name: machine
+      resource: true
+      data_source: true
+      timeouts:
+        default: PT10M
+    models:
+      machine: LifecycleResponse
+      machine_detail: MachineDetailResponse
+      machine_list: MachineListResponse
+      machine_list_item: MachineListItem
+      create_params: CreateMachineRequest
+      update_params: MachineSettingsUpdate
+      lifecycle_status: LifecycleStatus
+    methods:
+      list:
+        endpoint: get /v1/machines
+        paginated: cursor_page
+      create:
+        endpoint: post /v1/machines
+        docs:
+          response_property: machine_id
+        terraform:
+          method: create
+          id_property: machine_id
+          default_timeout: PT10M
+      retrieve:
+        endpoint: get /v1/machines/{machine_id}
+        docs:
+          response_property: machine_id
+        terraform:
+          method: read
+          id_path_param: machine_id
+          id_property: machine_id
+          default_timeout: PT2M
+      resize:
+        endpoint: post /v1/machines/{machine_id}/resize
+      autoresize:
+        endpoint: patch /v1/machines/{machine_id}/autoresizing
+      retrieve_autoresizing:
+        endpoint: get /v1/machines/{machine_id}/autoresizing
+      update:
+        endpoint: patch /v1/machines/{machine_id}
+        docs:
+          response_property: machine_id
+        terraform:
+          method: update
+          id_path_param: machine_id
+          id_property: machine_id
+          update_behavior: json_merge_patch
+          default_timeout: PT10M
+      delete:
+        endpoint: delete /v1/machines/{machine_id}
+        docs:
+          response_property: machine_id
+        terraform:
+          method: delete
+          id_path_param: machine_id
+          id_property: machine_id
+          default_timeout: PT10M
+      watch:
+        endpoint: get /v1/machines/{machine_id}/status/stream
+        streaming:
+          param_discriminator: null
+          stream_event_model: machines.machine_detail
+      sleep:
+        endpoint: post /v1/machines/{machine_id}/sleep
+        docs:
+          response_property: machine_id
+      wake:
+        endpoint: post /v1/machines/{machine_id}/wake
+        docs:
+          response_property: machine_id
+    subresources:
+      ports:
+        mcp: true
+        terraform:
+          name: machine_port
+          resource: true
+          data_source: true
+          timeouts:
+            default: PT5M
+        models:
+          port_create_params: CreatePortRequest
+          port_update_params: UpdatePortRequest
+          port: PortResponse
+          port_list: PortListResponse
+        methods:
+          list:
+            endpoint: get /v1/machines/{machine_id}/ports
+            paginated: cursor_page
+          create:
+            endpoint: post /v1/machines/{machine_id}/ports
+            docs:
+              response_property: port_id
+            terraform:
+              method: create
+              id_property: port_id
+              default_timeout: PT5M
+          retrieve:
+            endpoint: get /v1/machines/{machine_id}/ports/{port_id}
+            docs:
+              response_property: port_id
+            terraform:
+              method: read
+              id_path_param: port_id
+              id_property: port_id
+              default_timeout: PT2M
+          update:
+            endpoint: patch /v1/machines/{machine_id}/ports/{port_id}
+            docs:
+              response_property: port_id
+            terraform:
+              method: update
+              id_path_param: port_id
+              id_property: port_id
+              update_behavior: json_merge_patch
+              default_timeout: PT2M
+          delete:
+            endpoint: delete /v1/machines/{machine_id}/ports/{port_id}
+            docs:
+              response_property: port_id
+            terraform:
+              method: delete
+              id_path_param: port_id
+              id_property: port_id
+              default_timeout: PT5M
+      ssh:
+        mcp: true
+        terraform:
+          name: machine_ssh_session
+          resource: true
+          data_source: true
+          timeouts:
+            default: PT2M
+        models:
+          ssh_session_create_params: CreateSSHSessionRequest
+          ssh_session: SSHSessionResponse
+          ssh_session_list: SSHSessionListResponse
+          ssh_connection: SSHConnection
+          ssh_host_trust: SSHHostTrust
+        methods:
+          list:
+            endpoint: get /v1/machines/{machine_id}/ssh
+            paginated: cursor_page
+          create:
+            endpoint: post /v1/machines/{machine_id}/ssh
+            docs:
+              response_property: session_id
+            terraform:
+              method: create
+              id_property: session_id
+              default_timeout: PT2M
+          retrieve:
+            endpoint: get /v1/machines/{machine_id}/ssh/{session_id}
+            docs:
+              response_property: session_id
+            terraform:
+              method: read
+              id_path_param: session_id
+              id_property: session_id
+              default_timeout: PT1M
+          delete:
+            endpoint: delete /v1/machines/{machine_id}/ssh/{session_id}
+            docs:
+              response_property: session_id
+            terraform:
+              method: delete
+              id_path_param: session_id
+              id_property: session_id
+              default_timeout: PT2M
+      executions:
+        mcp: true
+        terraform:
+          name: machine_execution
+          resource: true
+          data_source: true
+          timeouts:
+            default: PT10M
+        models:
+          execution_create_params: CreateExecutionRequest
+          execution: ExecutionResponse
+          execution_list: ExecutionListResponse
+          execution_output: ExecutionOutputResponse
+          execution_event: ExecutionEvent
+          execution_events: ExecutionEventsResponse
+          artifact_ref: ArtifactRef
+        methods:
+          list:
+            endpoint: get /v1/machines/{machine_id}/executions
+            paginated: cursor_page
+          create:
+            endpoint: post /v1/machines/{machine_id}/executions
+            docs:
+              response_property: execution_id
+            terraform:
+              method: create
+              id_property: execution_id
+              default_timeout: PT10M
+          retrieve:
+            endpoint: get /v1/machines/{machine_id}/executions/{execution_id}
+            docs:
+              response_property: execution_id
+            terraform:
+              method: read
+              id_path_param: execution_id
+              id_property: execution_id
+              default_timeout: PT2M
+          delete:
+            endpoint: delete /v1/machines/{machine_id}/executions/{execution_id}
+            docs:
+              response_property: execution_id
+            terraform:
+              method: delete
+              id_path_param: execution_id
+              id_property: execution_id
+              default_timeout: PT5M
+          output:
+            endpoint: get /v1/machines/{machine_id}/executions/{execution_id}/output
+            docs:
+              response_property: execution_id
+          events:
+            endpoint: get /v1/machines/{machine_id}/executions/{execution_id}/events
+            paginated: cursor_page
+readme:
+  example_requests:
+    default:
+      type: request
+      endpoint: post /v1/machines
+      params:
+        vcpu: 1
+        memory_mib: 2048
+        storage_gib: 10
+      response_property: machine_id
+    headline:
+      type: request
+      endpoint: post /v1/machines
+      params:
+        vcpu: 1
+        memory_mib: 2048
+        storage_gib: 10
+      response_property: machine_id
+    errors:
+      type: request
+      endpoint: post /v1/machines
+      params:
+        vcpu: 1
+        memory_mib: 2048
+        storage_gib: 10
+      response_property: machine_id
+      example_properties:
+        error_code: IDEMPOTENCY_KEY_REUSED
+        message: idempotency key reused with different request parameters
+        retryable: false
+targets:
+  go:
+    edition: go.2026-2-3
+    package_name: dedalus
+    production_repo: dedalus-labs/dedalus-go
+    options:
+      enable_v2: true
+      union_property_getters: true
+  terraform:
+    edition: terraform.2025-10-08
+    production_repo: dedalus-labs/terraform-provider-dedalus
+    provider_name: dedalus
+    publish:
+      hashicorp_registry: false
+    options:
+      go_sdk_package: github.com/dedalus-labs/dedalus-go
+      infer_all_services: false
+      timeouts:
+        name: timeouts
+        default: PT10M
+      go_sdk_version: v0.8.0
+openapi:
+  transforms:
+  - command: merge
+    reason: Port sharing passwords are write-only credentials and must be redacted
+      in Terraform output.
+    args:
+      target:
+      - $.components.schemas.CreatePortRequest.properties.password
+      - $.components.schemas.UpdatePortRequest.properties.password
+      value:
+        x-sensitive: true
+  - command: merge
+    reason: The port example is a private binding without a sharing password.
+    args:
+      target: $.components.schemas.CreatePortRequest
+      value:
+        example:
+          port: 8080
+          protocol: http
+          visibility: private
