@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Dedalus. See CONTRIBUTING.md for details.
 
 package machine_execution
 
@@ -14,28 +14,31 @@ import (
 )
 
 type MachineExecutionDataSourceModel struct {
-	ID              types.String                                                           `tfsdk:"id" path:"execution_id,computed"`
-	ExecutionID     types.String                                                           `tfsdk:"execution_id" path:"execution_id,required"`
-	MachineID       types.String                                                           `tfsdk:"machine_id" path:"machine_id,required"`
-	CompletedAt     timetypes.RFC3339                                                      `tfsdk:"completed_at" json:"completed_at,computed" format:"date-time"`
-	CreatedAt       timetypes.RFC3339                                                      `tfsdk:"created_at" json:"created_at,computed" format:"date-time"`
-	Cwd             types.String                                                           `tfsdk:"cwd" json:"cwd,computed"`
-	ErrorCode       types.String                                                           `tfsdk:"error_code" json:"error_code,computed"`
-	ErrorMessage    types.String                                                           `tfsdk:"error_message" json:"error_message,computed"`
-	ExitCode        types.Int64                                                            `tfsdk:"exit_code" json:"exit_code,computed"`
-	ExpiresAt       timetypes.RFC3339                                                      `tfsdk:"expires_at" json:"expires_at,computed" format:"date-time"`
-	RetryAfterMs    types.Int64                                                            `tfsdk:"retry_after_ms" json:"retry_after_ms,computed"`
-	Signal          types.Int64                                                            `tfsdk:"signal" json:"signal,computed"`
-	StartedAt       timetypes.RFC3339                                                      `tfsdk:"started_at" json:"started_at,computed" format:"date-time"`
-	Status          types.String                                                           `tfsdk:"status" json:"status,computed"`
-	StderrBytes     types.Int64                                                            `tfsdk:"stderr_bytes" json:"stderr_bytes,computed"`
-	StderrTruncated types.Bool                                                             `tfsdk:"stderr_truncated" json:"stderr_truncated,computed"`
-	StdoutBytes     types.Int64                                                            `tfsdk:"stdout_bytes" json:"stdout_bytes,computed"`
-	StdoutTruncated types.Bool                                                             `tfsdk:"stdout_truncated" json:"stdout_truncated,computed"`
-	Command         customfield.List[types.String]                                         `tfsdk:"command" json:"command,computed"`
-	EnvKeys         customfield.List[types.String]                                         `tfsdk:"env_keys" json:"env_keys,computed"`
-	Artifacts       customfield.NestedObjectList[MachineExecutionArtifactsDataSourceModel] `tfsdk:"artifacts" json:"artifacts,computed"`
-	Timeouts        timeouts.Value                                                         `tfsdk:"timeouts"`
+	ID                types.String                                                           `tfsdk:"id" path:"execution_id,computed"`
+	ExecutionID       types.String                                                           `tfsdk:"execution_id" path:"execution_id,required"`
+	MachineID         types.String                                                           `tfsdk:"machine_id" path:"machine_id,required"`
+	CompletedAt       timetypes.RFC3339                                                      `tfsdk:"completed_at" json:"completed_at,computed" format:"date-time"`
+	CreatedAt         timetypes.RFC3339                                                      `tfsdk:"created_at" json:"created_at,computed" format:"date-time"`
+	CreationRequestID types.String                                                           `tfsdk:"creation_request_id" json:"creation_request_id,computed"`
+	CreationTraceID   types.String                                                           `tfsdk:"creation_trace_id" json:"creation_trace_id,computed"`
+	Cwd               types.String                                                           `tfsdk:"cwd" json:"cwd,computed"`
+	ErrorCode         types.String                                                           `tfsdk:"error_code" json:"error_code,computed"`
+	ErrorMessage      types.String                                                           `tfsdk:"error_message" json:"error_message,computed"`
+	ExitCode          types.Int64                                                            `tfsdk:"exit_code" json:"exit_code,computed"`
+	ExpiresAt         timetypes.RFC3339                                                      `tfsdk:"expires_at" json:"expires_at,computed" format:"date-time"`
+	RetryAfterMs      types.Int64                                                            `tfsdk:"retry_after_ms" json:"retry_after_ms,computed"`
+	Signal            types.Int64                                                            `tfsdk:"signal" json:"signal,computed"`
+	StartedAt         timetypes.RFC3339                                                      `tfsdk:"started_at" json:"started_at,computed" format:"date-time"`
+	Status            types.String                                                           `tfsdk:"status" json:"status,computed"`
+	StderrBytes       types.Int64                                                            `tfsdk:"stderr_bytes" json:"stderr_bytes,computed"`
+	StderrTruncated   types.Bool                                                             `tfsdk:"stderr_truncated" json:"stderr_truncated,computed"`
+	StdoutBytes       types.Int64                                                            `tfsdk:"stdout_bytes" json:"stdout_bytes,computed"`
+	StdoutTruncated   types.Bool                                                             `tfsdk:"stdout_truncated" json:"stdout_truncated,computed"`
+	Command           customfield.List[types.String]                                         `tfsdk:"command" json:"command,computed"`
+	EnvKeys           customfield.List[types.String]                                         `tfsdk:"env_keys" json:"env_keys,computed"`
+	Artifacts         customfield.NestedObjectList[MachineExecutionArtifactsDataSourceModel] `tfsdk:"artifacts" json:"artifacts,computed"`
+	LogCapture        customfield.NestedObject[MachineExecutionLogCaptureDataSourceModel]    `tfsdk:"log_capture" json:"log_capture,computed"`
+	Timeouts          timeouts.Value                                                         `tfsdk:"timeouts"`
 }
 
 func (m *MachineExecutionDataSourceModel) toReadParams(_ context.Context) (params dedalus.MachineExecutionGetParams, diags diag.Diagnostics) {
@@ -50,4 +53,11 @@ func (m *MachineExecutionDataSourceModel) toReadParams(_ context.Context) (param
 type MachineExecutionArtifactsDataSourceModel struct {
 	ArtifactID types.String `tfsdk:"artifact_id" json:"artifact_id,computed"`
 	Name       types.String `tfsdk:"name" json:"name,computed"`
+}
+
+type MachineExecutionLogCaptureDataSourceModel struct {
+	Code             types.String `tfsdk:"code" json:"code,computed"`
+	LostBytes        types.String `tfsdk:"lost_bytes" json:"lost_bytes,computed"`
+	State            types.String `tfsdk:"state" json:"state,computed"`
+	UnconfirmedBytes types.String `tfsdk:"unconfirmed_bytes" json:"unconfirmed_bytes,computed"`
 }

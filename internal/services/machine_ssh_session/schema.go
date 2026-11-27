@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Dedalus. See CONTRIBUTING.md for details.
 
 package machine_ssh_session
 
@@ -30,6 +30,7 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 				PlanModifiers: []planmodifier.String{stringplanmodifier.UseNonNullStateForUnknown(), stringplanmodifier.RequiresReplace()},
 			},
 			"machine_id": schema.StringAttribute{
+				Description:   "Bare, lowercase, hyphenated Machine UUID. Pass the returned machine_id unchanged.",
 				Required:      true,
 				PlanModifiers: []planmodifier.String{stringplanmodifier.RequiresReplace()},
 			},
@@ -59,11 +60,12 @@ func ResourceSchema(ctx context.Context) schema.Schema {
 				Computed: true,
 			},
 			"status": schema.StringAttribute{
-				Description: `Available values: "wake_in_progress", "ready", "closed", "expired", "failed".`,
+				Description: `Available values: "wake_in_progress", "ssh_in_progress", "ready", "closed", "expired", "failed".`,
 				Computed:    true,
 				Validators: []validator.String{
 					stringvalidator.OneOfCaseInsensitive(
 						"wake_in_progress",
+						"ssh_in_progress",
 						"ready",
 						"closed",
 						"expired",

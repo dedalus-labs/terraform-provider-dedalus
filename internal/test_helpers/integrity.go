@@ -461,6 +461,7 @@ func walkNested(path path, attribute ds.NestedAttribute, kind reflect.Kind, mode
 	} else if model.Implements(basetype.Elem()) {
 		errs = append(errs, checkCustom(append(path, idx...), &attri{attribute}, model)...)
 		model = genericParam(model, 0)
+		// ObjectValue carries field types at runtime; it has no tagged Go fields to inspect.
 		if model == reflect.TypeOf(basetypes.ObjectValue{}) {
 			return errs
 		}

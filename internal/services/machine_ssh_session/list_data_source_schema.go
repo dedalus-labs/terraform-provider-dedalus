@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Dedalus. See CONTRIBUTING.md for details.
 
 package machine_ssh_session
 
@@ -21,7 +21,8 @@ func ListDataSourceSchema(ctx context.Context) schema.Schema {
 	return schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"machine_id": schema.StringAttribute{
-				Required: true,
+				Description: "Bare, lowercase, hyphenated Machine UUID. Pass the returned machine_id unchanged.",
+				Required:    true,
 			},
 			"max_items": schema.Int64Attribute{
 				Description: "Max items to fetch, default: 1000",
@@ -50,11 +51,12 @@ func ListDataSourceSchema(ctx context.Context) schema.Schema {
 							Computed: true,
 						},
 						"status": schema.StringAttribute{
-							Description: `Available values: "wake_in_progress", "ready", "closed", "expired", "failed".`,
+							Description: `Available values: "wake_in_progress", "ssh_in_progress", "ready", "closed", "expired", "failed".`,
 							Computed:    true,
 							Validators: []validator.String{
 								stringvalidator.OneOfCaseInsensitive(
 									"wake_in_progress",
+									"ssh_in_progress",
 									"ready",
 									"closed",
 									"expired",

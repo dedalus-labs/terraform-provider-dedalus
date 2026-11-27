@@ -27,7 +27,7 @@ func TestInvariantProviderSurfaceMatchesPublicContract(t *testing.T) {
 		resources = append(resources, metadata.TypeName)
 	}
 	slices.Sort(resources)
-	wantResources := []string{"dedalus_machine", "dedalus_machine_execution", "dedalus_machine_ssh_session"}
+	wantResources := []string{"dedalus_machine", "dedalus_machine_execution", "dedalus_machine_port", "dedalus_machine_ssh_session"}
 	if !reflect.DeepEqual(resources, wantResources) {
 		t.Errorf("resources: got %v, want %v", resources, wantResources)
 	}
@@ -41,6 +41,7 @@ func TestInvariantProviderSurfaceMatchesPublicContract(t *testing.T) {
 	slices.Sort(sources)
 	wantSources := []string{
 		"dedalus_machine", "dedalus_machine_execution", "dedalus_machine_executions",
+		"dedalus_machine_port", "dedalus_machine_ports",
 		"dedalus_machine_ssh_session", "dedalus_machine_ssh_sessions", "dedalus_machines",
 	}
 	if !reflect.DeepEqual(sources, wantSources) {

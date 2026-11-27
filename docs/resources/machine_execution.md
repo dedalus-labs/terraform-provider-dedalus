@@ -14,7 +14,7 @@ description: |-
 
 ```terraform
 resource "dedalus_machine_execution" "example_machine_execution" {
-  machine_id = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c"
+  machine_id = "017f22e2-79b0-7cc3-98c4-dc0c0c07398f"
   command = ["string"]
   cwd = "cwd"
   env = {
@@ -30,8 +30,8 @@ resource "dedalus_machine_execution" "example_machine_execution" {
 
 ### Required
 
-- `command` (List of String)
-- `machine_id` (String)
+- `command` (List of String) Program and its arguments as an array of strings, such as ["ls", "-la"]. A single string is not split into arguments. To run a shell command line, pass ["sh", "-c", "<command line>"].
+- `machine_id` (String) Bare, lowercase, hyphenated Machine UUID. Pass the returned machine_id unchanged.
 
 ### Optional
 
@@ -46,6 +46,8 @@ resource "dedalus_machine_execution" "example_machine_execution" {
 - `artifacts` (Attributes List) (see [below for nested schema](#nestedatt--artifacts))
 - `completed_at` (String)
 - `created_at` (String)
+- `creation_request_id` (String)
+- `creation_trace_id` (String)
 - `env_keys` (List of String)
 - `error_code` (String)
 - `error_message` (String)
@@ -53,6 +55,7 @@ resource "dedalus_machine_execution" "example_machine_execution" {
 - `exit_code` (Number)
 - `expires_at` (String)
 - `id` (String) The ID of this resource.
+- `log_capture` (Attributes) (see [below for nested schema](#nestedatt--log_capture))
 - `retry_after_ms` (Number)
 - `signal` (Number)
 - `started_at` (String)
@@ -80,6 +83,17 @@ Read-Only:
 
 - `artifact_id` (String)
 - `name` (String)
+
+
+<a id="nestedatt--log_capture"></a>
+### Nested Schema for `log_capture`
+
+Read-Only:
+
+- `code` (String)
+- `lost_bytes` (String)
+- `state` (String) Available values: "pending", "incomplete", "unavailable".
+- `unconfirmed_bytes` (String)
 
 ## Import
 

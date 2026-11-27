@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// File generated from our OpenAPI spec by Dedalus. See CONTRIBUTING.md for details.
 
 package internal
 
@@ -10,6 +10,7 @@ import (
 	"github.com/dedalus-labs/dedalus-go/option"
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/machine"
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/machine_execution"
+	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/machine_port"
 	"github.com/dedalus-labs/terraform-provider-dedalus/internal/services/machine_ssh_session"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
@@ -49,10 +50,12 @@ func ProviderSchema(ctx context.Context) schema.Schema {
 				Optional:    true,
 			},
 			"api_key": schema.StringAttribute{
-				Optional: true,
+				Optional:  true,
+				Sensitive: true,
 			},
 			"x_api_key": schema.StringAttribute{
-				Optional: true,
+				Optional:  true,
+				Sensitive: true,
 			},
 			"dedalus_org_id": schema.StringAttribute{
 				Optional: true,
@@ -112,6 +115,7 @@ func (p *DedalusProvider) ConfigValidators(_ context.Context) []provider.ConfigV
 func (p *DedalusProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		machine.NewResource,
+		machine_port.NewResource,
 		machine_ssh_session.NewResource,
 		machine_execution.NewResource,
 	}
@@ -121,6 +125,8 @@ func (p *DedalusProvider) DataSources(ctx context.Context) []func() datasource.D
 	return []func() datasource.DataSource{
 		machine.NewMachineDataSource,
 		machine.NewMachinesDataSource,
+		machine_port.NewMachinePortDataSource,
+		machine_port.NewMachinePortsDataSource,
 		machine_ssh_session.NewMachineSSHSessionDataSource,
 		machine_ssh_session.NewMachineSSHSessionsDataSource,
 		machine_execution.NewMachineExecutionDataSource,

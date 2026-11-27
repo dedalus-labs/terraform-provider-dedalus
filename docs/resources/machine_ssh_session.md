@@ -14,7 +14,7 @@ description: |-
 
 ```terraform
 resource "dedalus_machine_ssh_session" "example_machine_ssh_session" {
-  machine_id = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c"
+  machine_id = "017f22e2-79b0-7cc3-98c4-dc0c0c07398f"
   public_key = "public_key"
 }
 ```
@@ -24,7 +24,7 @@ resource "dedalus_machine_ssh_session" "example_machine_ssh_session" {
 
 ### Required
 
-- `machine_id` (String)
+- `machine_id` (String) Bare, lowercase, hyphenated Machine UUID. Pass the returned machine_id unchanged.
 - `public_key` (String)
 
 ### Optional
@@ -42,7 +42,7 @@ resource "dedalus_machine_ssh_session" "example_machine_ssh_session" {
 - `ready_at` (String)
 - `retry_after_ms` (Number)
 - `session_id` (String)
-- `status` (String) Available values: "wake_in_progress", "ready", "closed", "expired", "failed".
+- `status` (String) Available values: "wake_in_progress", "ssh_in_progress", "ready", "closed", "expired", "failed".
 
 <a id="nestedatt--timeouts"></a>
 ### Nested Schema for `timeouts`

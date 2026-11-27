@@ -14,7 +14,7 @@ description: |-
 
 ```terraform
 data "dedalus_machine" "example_machine" {
-  machine_id = "dm-ecc2efdd-ddfa-31a9-c6f1-b833d337aa7c"
+  machine_id = "017f22e2-79b0-7cc3-98c4-dc0c0c07398f"
 }
 ```
 
@@ -23,7 +23,7 @@ data "dedalus_machine" "example_machine" {
 
 ### Required
 
-- `machine_id` (String)
+- `machine_id` (String) Bare, lowercase, hyphenated Machine UUID. Pass the returned machine_id unchanged.
 
 ### Optional
 
@@ -33,7 +33,7 @@ data "dedalus_machine" "example_machine" {
 
 - `autosleep_seconds` (Number) Seconds of inactivity before autosleep. 0 disables autosleep.
 - `desired_state` (String) Available values: "running", "sleeping", "destroyed".
-- `id` (String) The ID of this resource.
+- `id` (String) Bare, lowercase, hyphenated Machine UUID. Pass the returned machine_id unchanged.
 - `memory_mib` (Number) Memory in MiB.
 - `status` (Attributes) (see [below for nested schema](#nestedatt--status))
 - `storage_gib` (Number)
@@ -52,6 +52,7 @@ Optional:
 
 Read-Only:
 
+- `autoresize` (Attributes) (see [below for nested schema](#nestedatt--status--autoresize))
 - `last_error` (String)
 - `last_progress_at` (String)
 - `last_transition_at` (String)
@@ -59,3 +60,30 @@ Read-Only:
 - `reason` (String)
 - `retryable` (Boolean)
 - `revision` (String)
+
+<a id="nestedatt--status--autoresize"></a>
+### Nested Schema for `status.autoresize`
+
+Read-Only:
+
+- `cpu` (Attributes) (see [below for nested schema](#nestedatt--status--autoresize--cpu))
+- `memory` (Attributes) (see [below for nested schema](#nestedatt--status--autoresize--memory))
+
+<a id="nestedatt--status--autoresize--cpu"></a>
+### Nested Schema for `status.autoresize.cpu`
+
+Read-Only:
+
+- `blocked_at` (String) Time the current refusal was first recorded.
+- `blocked_reason` (String) Why the latest automatic increase could not proceed, as the error code an explicit resize would return. Absent once an automatic increase is accepted.
+Available values: "MACHINE_GROWTH_LIMIT_REACHED", "MACHINE_TIER_SHAPE_EXCEEDED", "MACHINE_QUOTA_EXCEEDED", "MACHINE_MEMORY_ABOVE_LIMIT", "ASSIGNED_HOST_CAPACITY_CONFLICT", "MACHINE_PLACEMENT_EXHAUSTED", "MACHINE_RESIZE_UNAVAILABLE", "MACHINE_SHAPE_UNSUPPORTED".
+
+
+<a id="nestedatt--status--autoresize--memory"></a>
+### Nested Schema for `status.autoresize.memory`
+
+Read-Only:
+
+- `blocked_at` (String) Time the current refusal was first recorded.
+- `blocked_reason` (String) Why the latest automatic increase could not proceed, as the error code an explicit resize would return. Absent once an automatic increase is accepted.
+Available values: "MACHINE_GROWTH_LIMIT_REACHED", "MACHINE_TIER_SHAPE_EXCEEDED", "MACHINE_QUOTA_EXCEEDED", "MACHINE_MEMORY_ABOVE_LIMIT", "ASSIGNED_HOST_CAPACITY_CONFLICT", "MACHINE_PLACEMENT_EXHAUSTED", "MACHINE_RESIZE_UNAVAILABLE", "MACHINE_SHAPE_UNSUPPORTED".
